@@ -1,39 +1,68 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { colors } from "@/components/color";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Stack } from "expo-router";
+import { View, Dimensions, StyleSheet } from "react-native";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+const queryClient = new QueryClient();
+const { width, height } = Dimensions.get("window");
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+const screens = [
+  { name: "index", showHeader: false },
+  { name: "screen/home", showHeader: false },
+  { name: "screen/operations", title: "OPERATIONS" },
+  { name: "screen/projects", title: "PROJECTS" },
+  { name: "screen/material", title: "MATERIALS" },
+  { name: "screen/finance", title: "FINANCE" },
+  { name: "screen/fuel", title: "FUEL/COAL" },
+  { name: "screen/bunker", title: "BUNKER COAL" },
+  { name: "screen/hr", title: "HR DEPARTMENT" },
+  { name: "screen/materialPo", title: "Material PO" },
+  { name: "screen/materialPr", title: "Material PR" },
+  { name: "screen/financePlant", title: "Finance Plant" },
+];
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
+function CustomHeader() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <View style={styles1.background}>
+      <MaterialCommunityIcons
+        name="dots-vertical"
+        size={35}
+        color={colors.skyblue}
+        style={{ left: width * 0.9 }}
+      />
+    </View>
   );
 }
+
+export default function RootLayout() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Stack>
+        {screens.map(({ name, title = "", showHeader = true }) => (
+          <Stack.Screen
+            key={name}
+            name={name}
+            options={{
+              headerShown: showHeader,
+              headerTitle: title || undefined,
+              headerTitleAlign: "center",
+              headerTitleStyle: { color: colors.skyblue },
+              headerTintColor: colors.skyblue,
+              headerBackground: showHeader ? CustomHeader : undefined,
+            }}
+          />
+        ))}
+      </Stack>
+    </QueryClientProvider>
+  );
+}
+
+const styles1 = StyleSheet.create({
+  background: {
+    backgroundColor: colors.lightblue,
+    height: height * 0.1,
+    padding: 10,
+    flexDirection: "row",
+  },
+});
