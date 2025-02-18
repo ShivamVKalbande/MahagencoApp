@@ -5,7 +5,7 @@ export const colors = {
     gray:"#808080",
     gradientBlue:"#62cff4",
     lightGray:"#ede4e3",
-    yellow:"rgb(255, 255, 0)",
+    yellow:"rgb(255, 215, 0)",
     darkYellow:"rgb(228, 155, 15)",
     skyblue:"#0097D8",
     lightblue:"#87CEEB",

@@ -20,6 +20,7 @@ const screens = [
   { name: "screen/materialPo", title: "Material PO" },
   { name: "screen/materialPr", title: "Material PR" },
   { name: "screen/financePlant", title: "Finance Plant" },
+  { name: "screen/projectDetail", title: "Project" },
 ];
 
 function CustomHeader() {

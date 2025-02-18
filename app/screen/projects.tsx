@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 import Dropdown from '../components/Dropdown'
 import styles from '../css/style';
 import { colors } from '@/components/color';
+import ProjectsCard from '../components/ProjectsCard';
 
-const { width } = Dimensions.get('window');
+
 const Projects = () => {
   const [plant, setPlant] = useState([{ label: "MAHAGENCO", value: "" }]);
   const [selectedItem, setSelectedItem] = useState(plant[0]);
@@ -63,45 +64,51 @@ const Projects = () => {
           </View>
         </View>
         {/* card end */}
-        {/* Ongoing Project Card start */}
+        {/* Project Card start */}
         <View style={styles.plantHeaderContainer}>
           <Text style={styles.departmentHeading}>Projects :</Text>
         </View>
-        <View
-          style={styles.plantCardContainer}
-        >
-          {/* plant Card Header start */}
-          <View style={styles.plantHeaderContainer}>
-            <Text style={{ fontWeight: 'bold' }}>Ongoing Projects</Text>
-            <TouchableOpacity
-              // onPress={detailPlant}
-              style={[styles.plantButton, { left: -width * 0.04, backgroundColor:colors.green,}]}
-            >
-              <Text style={[styles.smallLabel, { color: colors.white }]}>View Projects</Text>
-            </TouchableOpacity>
-          </View>
-          {/* plant Card Header End */}
-          {/* plant Card Body start */}
-          <View style={styles.plantCard}>
-          <View style={[styles.plantBodycontainer, {width:width*0.2, height:60,}]}>
-              <Text style={{ fontWeight: 'bold', color:colors.green, fontSize:22, justifyContent: 'center' }}>08</Text>
-            </View>
-            <View style={[styles.plantBodycontainer, {width:width*0.2, height:60,}]}>
-              <Text> No. of</Text>
-              <Text >Projects</Text>
-            </View>
-            <View style={[styles.plantBodycontainer, {width:width*0.2, height:60,}]}>
-              <Text> Total Capacity</Text>
-              <Text style={{ fontWeight: 'bold' }}>1124.6</Text>
-            </View>
-            <View style={[styles.plantBodycontainer, { borderRightWidth: 0, width:width*0.2, }]}>
-              <Text> Tentative Total Cost</Text>
-              <Text style={{ fontWeight: 'bold' }}> 862.70 Cr.</Text>
-            </View>
-          </View>
-          {/* plant Card Body end */}
-        </View>
-        {/* Ongoing Project Card end */}
+        {/* ongoing project card */}
+        <ProjectsCard
+          projectNumber="08"
+          projectName="Ongoing Project"
+          capacity="1124.6"
+          cost="862.70"
+          bgColor={colors.green}
+        />
+        {/*  Projects Under Building Stage card */}
+        <ProjectsCard
+          projectNumber="11"
+          projectName="Projects Under Building Stage"
+          capacity="1527.6"
+          cost="8291.72"
+          bgColor={colors.skyblue}
+        />
+        {/*  A. Under BFeasibility & Land Acquisition card */}
+        <ProjectsCard
+          projectNumber="08"
+          projectName="A. Under Feasibility & Land Acquisition"
+          capacity="2600"
+          cost="-----"
+          bgColor={colors.red}
+        />
+         {/*  B. Under Feasibility & Land Acquisition card */}
+         <ProjectsCard
+          projectNumber="03"
+          projectName="B. Under Feasibility & Land Acquisition"
+          capacity="1672"
+          cost="-----"
+          bgColor={colors.darkYellow}
+        />
+        {/*   Future Planned card */}
+        <ProjectsCard
+          projectNumber="01"
+          projectName="Future Planned"
+          capacity="900"
+          cost="-----"
+          bgColor={colors.yellow}
+        />
+        {/* Project Card end */}
       </View>
       {/* main content end */}
     </ScrollView>

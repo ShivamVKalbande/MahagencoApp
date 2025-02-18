@@ -239,6 +239,16 @@ export default styles = StyleSheet.create({
         width: width*0.65,
         height: 20,
     },
+    fuelSliderBox:{
+        flex: 1,
+        borderBottomWidth:1,
+        borderColor:colors.gray,
+        paddingBottom:10,
+        marginBottom:10,
+    },
+    FuelSlider:{
+        width: width*0.8,
+    },
     labelContainer: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
@@ -303,7 +313,8 @@ export default styles = StyleSheet.create({
     },
     tableHeadText:{
         color: colors.white, 
-        textAlign:'center'
+        textAlign:'center',
+        fontSize:12,
     },
     tableText:{ 
         textAlign: 'center', 
@@ -338,12 +349,13 @@ export default styles = StyleSheet.create({
     },
     plantButton:{
         backgroundColor:colors.skyblue,
-        width:width*0.2,
+        // width:width*0.2,
         height:width*0.08,
         borderRadius:width*0.5,
         left:width*0.01,
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        paddingHorizontal:5
     },
     plantBodycontainer:{
         width:width*0.3,
@@ -364,5 +376,21 @@ export default styles = StyleSheet.create({
     onGoingContainer:{
         flexDirection:'row', 
         paddingBottom:5 
+    },
+    // fuel slider start
+    sliderBottomContainer:{
+        width:width*0.9, 
+        padding:10, 
+        justifyContent:'space-between', 
+        backgroundColor: colors.lightblue, 
+        borderBottomLeftRadius:20, 
+        borderBottomRightRadius:20, 
+        marginBottom:10,
+        flexDirection:'row',
+    },
+    sliderBottomText:{
+        fontSize: 14,
+        fontWeight:'600',
+        textAlign:'center'
     },
 });
