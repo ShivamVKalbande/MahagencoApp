@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import styles from '../css/style';
 import { useNavigation } from 'expo-router';
 
@@ -40,19 +40,19 @@ const MaterialCardPurchase = ({ title, value, circle1, current, unit, purchase, 
           </Text>
           <View style={{ flexDirection: 'row', padding: 5 }}>
             <View style={{ marginHorizontal: 5 }}>
-              <View style={{ height: 20, width: 40, borderRadius: 10, backgroundColor: colors.red }}>
+              <View style={{ height: 20, width: 40, borderRadius: 10, backgroundColor: colors.red, justifyContent:'center' }}>
               <Text style={[styles.smallLabel, styles.progressiveText]}>{circle2}</Text>
               </View>
               <Text style={styles.smallLabel}>Active</Text>
             </View>
             <View style={{ marginHorizontal: 5 }}>
-              <View style={{ height: 20, width: 40, borderRadius: 10, backgroundColor: colors.skyblue }}>
+              <View style={{ height: 20, width: 40, borderRadius: 10, backgroundColor: colors.skyblue, justifyContent:'center' }}>
               <Text style={[styles.smallLabel, styles.progressiveText]}>{circle3}</Text>
               </View>
               <Text style={styles.smallLabel}>In Release</Text>
             </View>
             <View style={{ marginHorizontal: 5 }}>
-              <View style={{ height: 20, width: 40, borderRadius: 10, backgroundColor: colors.green }}>
+              <View style={{ height: 20, width: 40, borderRadius: 10, backgroundColor: colors.green, justifyContent:'center' }}>
                 <Text style={[styles.smallLabel, styles.progressiveText]}>{circle1}</Text>
               </View>
               <Text style={styles.smallLabel}>Completed</Text>

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import styles from '../css/style';
 import Dropdown from '../components/Dropdown';
 import ScreenCard from '../components/ScreenCard';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 
 const { width } = Dimensions.get('window');
 const FinancePlant = () => {
@@ -102,7 +102,7 @@ const FinancePlant = () => {
                                 <View style={{ width: width * 0.2 }}>
                                     <Text style={styles.tableText}>{item.consumed}</Text>
                                 </View>
-                                <View style={{ width: width * 0.2, padding: 10 }}>
+                                <View style={{ width: width * 0.2 }}>
                                     <Text style={styles.tableText}>{item.available}</Text>
                                 </View>
                             </View>

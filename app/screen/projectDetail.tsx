@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import styles from '../css/style';
 import Dropdown from '../components/Dropdown';
 import ScreenCard from '../components/ScreenCard';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import { useRoute } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
@@ -107,7 +107,7 @@ const ProjectDetail = () => {
                                 <View style={{ width: width * 0.225 }}>
                                     <Text style={styles.tableText}>{item.cost}</Text>
                                 </View>
-                                <View style={{ width: width * 0.225, padding: 10 }}>
+                                <View style={{ width: width * 0.225 }}>
                                     <Text style={styles.tableText}>{item.compilations}</Text>
                                 </View>
                             </View>

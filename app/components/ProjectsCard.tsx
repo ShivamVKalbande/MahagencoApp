@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import styles from '../css/style';
 import { useNavigation } from 'expo-router';
 

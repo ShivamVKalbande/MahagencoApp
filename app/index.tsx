@@ -9,10 +9,10 @@ import {
   StatusBar,
 } from 'react-native';
 import React, { useState } from 'react';
-import { colors } from '../components/color';
+import { colors } from '../constant/color';
 import { useNavigation } from '@react-navigation/native';
 import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
-import image from '@/components/image';
+import image from '@/constant/image';
 
 const HomeScreen = () => {
   const navigation = useNavigation();

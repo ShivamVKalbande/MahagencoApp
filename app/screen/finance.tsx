@@ -2,7 +2,7 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import Dropdown from '../components/Dropdown'
 import ScreenCard from '../components/ScreenCard';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import styles from '../css/style';
 import { useNavigation } from 'expo-router';
 
@@ -121,4 +121,4 @@ const Finance = () => {
   )
 }
 
-export default Finance
+export default Finance;

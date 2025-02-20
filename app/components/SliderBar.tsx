@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React, { useCallback, useRef } from 'react'
 import styles from '../css/style';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import Slider from '@react-native-community/slider';
 
 const SliderBar = ({ sliderValue, setSliderValue }) => {

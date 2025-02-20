@@ -2,7 +2,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { View, Text } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import styles from '../css/style';
 
 const SliderComponent = ({ sliderValue, setSliderValue }: any) => {

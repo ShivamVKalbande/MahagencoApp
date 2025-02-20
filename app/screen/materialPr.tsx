@@ -6,10 +6,10 @@ import Dropdown from '../components/Dropdown';
 import styles from '../css/style';
 import MaterialCardPurchase from '../components/MaterialCardPurchase';
 import SmallDropdown from '../components/SmallDropdown';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import { useRoute } from '@react-navigation/native';
 import { getPr, postPrMaterials } from '../api/materials';
-
+import moment from 'moment';
 
 const { width } = Dimensions.get('window');
 const MaterialPr = () => {
@@ -71,11 +71,12 @@ const MaterialPr = () => {
         console.error("Invalid Pr API response");
         return;
       }
-      setActive(Number(data.Active) || 0);
-      setRelease(Number(data.InRelease) || 0);
-      setComplete(Number(data.Completed) || 0);
-      setCount(Number(data.Count) || 0);
+      setActive(isNaN(parseFloat(data.Active)) ? 0 : parseFloat(data.Active));
+      setRelease(isNaN(parseFloat(data.InRelease)) ? 0 : parseFloat(data.InRelease));
+      setComplete(isNaN(parseFloat(data.Completed)) ? 0 : parseFloat(data.Completed));
+      setCount(isNaN(parseFloat(data.Count)) ? 0 : parseFloat(data.Count));
       setTotal(data.Total || 0);
+//    setTotal(isNaN(parseFloat(data.Total)) ? 0 : parseFloat(data.Total));
     },
     onError: (error) => {
       console.error("Error fetching Po data:", error);
@@ -160,7 +161,7 @@ const MaterialPr = () => {
           </View>
           <View style={{ width: width * 0.25, margin: 5, justifyContent: 'center' }}>
             <Text style={styles.smallLabel}>Total Value</Text>
-            <Text style={[styles.smallLabel, { fontWeight: 'bold' }]}>37962300206.15</Text>
+            <Text style={[styles.smallLabel, { fontWeight: 'bold' }]}>{prTableTotal}</Text>
             <Text style={styles.smallLabel}>of completed pr</Text>
           </View>
         </View>
@@ -188,12 +189,18 @@ const MaterialPr = () => {
                   <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.Purchase}</Text>
                 </View>
                 <View style={{ width: width * 0.2 }}>
-                  <Text style={styles.tableText}>{item.PrCrDate ? new Date(item.PrCrDate).toISOString().split('T')[0] : ''}</Text>
+                  <Text style={styles.tableText}>
+                    {/* {moment(item.PrCrDate).format("DD MMM YYYY")} */}
+                    {item.PrCrDate ? moment(item.PrCrDate).format("DD MMM YYYY") : "N/A"}
+                    </Text>
                 </View>
                 <View style={{ width: width * 0.2 }}>
-                  <Text style={styles.tableText}>{item.PrValueWithTax}</Text>
+                  <Text style={styles.tableText}>
+                    {/* {item.PrValueWithTax} */}
+                  {isNaN(parseFloat(item.PrValueWithTax)) ? "0.00" : parseFloat(item.PrValueWithTax).toFixed(2)}
+                  </Text>
                 </View>
-                <View style={{ width: width * 0.2, padding: 10 }}>
+                <View style={{ width: width * 0.2}}>
                   <Text style={styles.tableText}>{item.PODocType}</Text>
                 </View>
               </View>

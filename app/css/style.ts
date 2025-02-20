@@ -1,4 +1,4 @@
-import { colors } from "@/components/color";
+import { colors } from "@/constant/color";
 import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get('window');
@@ -35,8 +35,7 @@ export default styles = StyleSheet.create({
         backgroundColor: colors.white,
         // height: 800,
         width: width * 1,
-        borderWidth: 1,
-        borderColor: colors.black,
+        // borderWidth: 0.2, 
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
         paddingBottom: width * 0.8,
@@ -45,7 +44,7 @@ export default styles = StyleSheet.create({
         flexDirection: 'row'
     },
     cardContainer: {
-        height: 200,
+        // height: 200,
         width: width * 0.8,
         backgroundColor: colors.lightGray,
         elevation: 10,
@@ -90,17 +89,19 @@ export default styles = StyleSheet.create({
     },
     departmentRow: {
         flexDirection: 'row',
-        borderBottomWidth: 1,
-        alignItems: 'center'
+        borderBottomWidth: 0.2,
+        alignItems: 'center',
+        borderColor:colors.gray
     },
     departmentBox: {
         width: width * 0.25,
         height: width * 0.25,
-        borderRightWidth: 1,
+        borderRightWidth: 0.2,
         margin: 10,
         // padding:10,
         alignItems: 'center',
         justifyContent: 'center',
+        borderColor:colors.gray,
     },
     departmentBox3: {
         width: width * 0.25,
@@ -308,7 +309,7 @@ export default styles = StyleSheet.create({
     tableData:{ 
         flexDirection: 'row', 
         paddingVertical: 10, 
-        borderBottomWidth: 1, 
+        borderBottomWidth: 0.2, 
         borderBottomColor: colors.gray, 
     },
     tableHeadText:{
@@ -392,5 +393,28 @@ export default styles = StyleSheet.create({
         fontSize: 14,
         fontWeight:'600',
         textAlign:'center'
+    },
+    smallSliderBottomContainer:{ 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        width:width*0.85,
+        paddingVertical:10,
+        borderBottomWidth:1,
+        borderBottomColor:colors.gray,
+        marginBottom:10,
+    },
+    smallDropdownContainer:{ 
+        margin: 5, 
+        justifyContent: 'center', 
+        borderWidth:1, 
+        borderColor:colors.gray, 
+        borderRadius:10, 
+        paddingHorizontal:30, 
+        // left:-width*0.1,
+    },
+    // icon image on home 
+    iconImage:{
+        width:60,
+        height:60,
     },
 });

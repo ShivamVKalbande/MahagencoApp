@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, Text, View } from 'react-native';
 import styles from '../css/style'
 import Dropdown from '../components/Dropdown';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import SliderBar from '../components/SliderBar';
 import ScreenCard from '../components/ScreenCard';
 import { getPlant, getUnit, postOperation } from '../api/operation'

@@ -6,10 +6,10 @@ import Dropdown from '../components/Dropdown';
 import styles from '../css/style';
 import MaterialCardPurchase from '../components/MaterialCardPurchase';
 import SmallDropdown from '../components/SmallDropdown';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import { getPo, getPoDocType, postPoMaterials } from '../api/materials';
 import { useRoute } from '@react-navigation/native';
-
+import moment from 'moment';
 const { width } = Dimensions.get('window');
 const MaterialPo = () => {
   const route = useRoute();
@@ -88,10 +88,10 @@ const MaterialPo = () => {
         console.error("Invalid Po API response");
         return;
       }
-      setActive(Number(data.Active) || 0);
-      setRelease(Number(data.InRelease) || 0);
-      setComplete(Number(data.Completed) || 0);
-      setCount(Number(data.Count) || 0);
+      setActive(isNaN(parseFloat(data.Active)) ? 0 : parseFloat(data.Active));
+      setRelease(isNaN(parseFloat(data.InRelease)) ? 0 : parseFloat(data.InRelease));
+      setComplete(isNaN(parseFloat(data.Completed)) ? 0 : parseFloat(data.Completed));
+      setCount(isNaN(parseFloat(data.Count)) ? 0 : parseFloat(data.Count));
       setTotal(data.Total || 0);
     },
     onError: (error) => {
@@ -121,7 +121,7 @@ const MaterialPo = () => {
   }, []);
 
   return (
-    <ScrollView
+    <View
       showsVerticalScrollIndicator={false}
       style={styles.container}>
       {/* main container start */}
@@ -200,9 +200,16 @@ const MaterialPo = () => {
                 poTable.map((item, index) => (
                   <View key={index} style={styles.tableData}>
                     <View style={{ width: width * 0.3 }}><Text style={styles.tableText}>{item.VendorName}</Text></View>
-                    <View style={{ width: width * 0.2 }}><Text style={styles.tableText}>{item.POCrDate ? new Date(item.POCrDate).toISOString().split('T')[0] : ''}</Text></View>
-                    <View style={{ width: width * 0.2 }}><Text style={styles.tableText}>{item.POValueWithTax}</Text></View>
-                    <View style={{ width: width * 0.2, padding: 10 }}><Text style={styles.tableText}>{item.PODocType}</Text></View>
+                    <View style={{ width: width * 0.2 }}><Text style={styles.tableText}>
+                      {/* {moment(item.POCrDate).format("DD MMM YYYY") } */}
+                      {item.POCrDate ? moment(item.POCrDate).format("DD MMM YYYY") : "N/A"}
+                      </Text></View>
+                    <View style={{ width: width * 0.2 }}><Text style={styles.tableText}>
+                      {/* {item.POValueWithTax} */}
+                      {isNaN(parseFloat(item.POValueWithTax)) ? "0.00" : parseFloat(item.POValueWithTax).toFixed(2)}
+                      </Text>
+                      </View>
+                    <View style={{ width: width * 0.2 }}><Text style={styles.tableText}>{item.PODocType}</Text></View>
                   </View>
                 ))
               )}
@@ -214,7 +221,7 @@ const MaterialPo = () => {
           </>
         )}
       </View>
-    </ScrollView>
+    </View>
   )
 }
 

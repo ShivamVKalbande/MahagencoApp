@@ -2,7 +2,7 @@ import { View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-nati
 import React, { useState } from 'react'
 import Dropdown from '../components/Dropdown'
 import styles from '../css/style';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import ProjectsCard from '../components/ProjectsCard';
 
 

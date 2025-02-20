@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import styles from '../css/style'
 
 const { width } = Dimensions.get('window');
@@ -20,7 +20,11 @@ const ScreenCard = ({ title, subTitle, value, progress, current, circleHeading, 
           <Text style={styles.smallLabel}>{subTitle}</Text>
           <Text style={styles.smallLabel}>{value}</Text>
         </View>
-        <Text style={{color:colors.green}}>{ secondTitle }</Text>
+        <Text 
+        style={{color:colors.green}}
+        >
+          { secondTitle }
+          </Text>
         <View style={[styles.textContainer, { borderColor: colors.lightGray, flexDirection: 'row' }]}>
           <Text style={[styles.mediumLabel, { fontWeight: 'bold' }]}>{current}</Text>
           <Text style={[styles.mediumLabel, { color: colors.red }]}>{ meter }</Text>

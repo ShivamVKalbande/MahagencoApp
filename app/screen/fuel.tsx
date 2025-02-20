@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Dimensions } from 'react-native'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import Dropdown from '../components/Dropdown'
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import styles from '../css/style';
 import Slider from '@react-native-community/slider';
 import FuelSlider from '../components/fuelSlider';
@@ -9,11 +9,11 @@ import FuelSlider from '../components/fuelSlider';
 const { width } = Dimensions.get('window');
 const Fuel = () => {
   const [plant, setPlant] = useState([{ label: "MAHAGENCO", value: "mahagenco" }]);
-  const duration = [
+  const duration = useMemo(() => [
     { label: "Year", value: "year" },
     { label: "Month", value: "month" },
     { label: "Day", value: "day" },
-  ]
+  ], []);
   const [selectedItem, setSelectedItem] = useState(plant[0]);
   const [selectedItemTime, setSelectedItemTime] = useState(duration[0]);
   const tariff = [
@@ -27,25 +27,28 @@ const Fuel = () => {
 
 
   // slider data start
-  const [grossSliderValue, setGrossSliderValue] = useState("0");
-  const [apcSliderValue, setApcSliderValue] = useState("0");
-  const [socSliderValue, setSocSliderValue] = useState("0");
-  const [domesticSliderValue, setDomesticSliderValue] = useState("0");
-  const [washSliderValue, setWashSliderValue] = useState("0");
-  const [importSlidervalue, setImportSliderValue] = useState("0");
-  const [ldoSliderValue, setLdoSliderValue] = useState("0");
-  const [foSliderValue, setFoSliderValue] = useState("0");
-  const [domesticKcalSliderValue, setDomesticKcalSliderValue] = useState("0");
-  const [washKcalSliderValue, setWashKcalSliderValue] = useState("0");
-  const [importKcalSliderValue, setImportKcalSliderValue] = useState("0");
-  const [ldoKcalSliderValue, setLdoKcalSliderValue] = useState("0");
-  const [foKcalSliderValue, setFoKcalSliderValue] = useState("0");
-  const [domesticMtSliderValue, setDomesticMtSliderValue] = useState("0");
-  const [washMtSliderValue, setWashMtSliderValue] = useState("0");
-  const [importMtSliderValue, setImportMtSliderValue] = useState("0");
-  const [ldoKlSliderValue, setLdoKlSliderValue] = useState("0");
-  const [foKlSliderValue, setFoKlSliderValue] = useState("0");
-  const [otherSliderValue, setOtherSliderValue] = useState("0");
+  const [sliderValues, setSliderValues] = useState({
+    gross: 0,
+    apc: 0,
+    soc: 0,
+    domestic: 0,
+    wash: 0,
+    import: 0,
+    ldo: 0,
+    fo: 0,
+    domesticKcal: 0,
+    washKcal: 0,
+    importKcal: 0,
+    ldoKcal: 0,
+    foKcal: 0,
+    domesticMt: 0,
+    washMt: 0,
+    importMt: 0,
+    ldoKl: 0,
+    foKl: 0,
+    other: 0,
+  });
+
 
 
   return (
@@ -94,13 +97,13 @@ const Fuel = () => {
         {/* slider Start */}
         <FuelSlider
           energyName="Gross Generation MU"
-          sliderValue={grossSliderValue}
-          setSliderValue={setGrossSliderValue}
+          sliderValue={sliderValues.gross}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, gross: newValue }))}
         />
         <FuelSlider
           energyName="APC MU"
-          sliderValue={apcSliderValue}
-          setSliderValue={setApcSliderValue}
+          sliderValue={sliderValues.apc}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, apc: newValue }))}
         />
         {/* slider Buttom Container start */}
 
@@ -116,15 +119,165 @@ const Fuel = () => {
         </View>
 
         {/* slider Buttom Container End */}
-        <View style={styles.detailChartContainer}>
-          <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Land Coal Price</Text>
-        </View>
+
         <FuelSlider
           energyName="SOC KL"
-          sliderValue={socSliderValue}
-          setSliderValue={setSocSliderValue}
+          sliderValue={sliderValues.soc}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, soc: newValue }))}
         />
+        <View style={styles.smallSliderBottomContainer}>
+          <Text style={styles.sliderBottomText}>SOC ml/Kwh</Text>
+          <Text style={styles.sliderBottomText}>0.0</Text>
+        </View>
+        {/* slider Buttom Container start */}
+        <View style={styles.sliderBottomContainer}>
+          <View>
+            <Text style={styles.sliderBottomText}>Coal Factor Kg/Kwh</Text>
+          </View>
+          <View>
+            <Text style={styles.sliderBottomText}>0.707</Text>
+          </View>
+        </View>
+        {/* slider Buttom Container End */}
+        {/* blue text start */}
+        <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
+          <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Land Coal Price</Text>
+        </View>
+        {/* blue text end */}
+        <FuelSlider
+          energyName="Domestic Rs/MT"
+          sliderValue={sliderValues.domestic}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, domestic: newValue }))}
+        />
+        <FuelSlider
+          energyName="Wash Coal Rs/MT"
+          sliderValue={sliderValues.wash}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, wash: newValue }))}
+        />
+        <FuelSlider
+          energyName="Import Rs/MT"
+          sliderValue={sliderValues.import}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, import: newValue }))}
+        />
+        {/* blue text start */}
+        <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
+          <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Land Oil Price</Text>
+        </View>
+        {/* blue text end */}
+        <FuelSlider
+          energyName="LDO Rs/KL"
+          sliderValue={sliderValues.ldo}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, ldo: newValue }))}
+        />
+        <FuelSlider
+          energyName="FO Rs/KL"
+          sliderValue={sliderValues.fo}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, fo: newValue }))}
+        />
+        {/* blue text start */}
+        <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
+          <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>GCV Coal</Text>
+        </View>
+        {/* blue text end */}
+        <FuelSlider
+          energyName="Domestic Kcal/Kg"
+          sliderValue={sliderValues.domesticKcal}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, domesticKcal: newValue }))}
+        />
+        <FuelSlider
+          energyName="Wash Coal Kcal/Kg"
+          sliderValue={sliderValues.washKcal}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, washKcal: newValue }))}
+        />
+        <FuelSlider
+          energyName="Import Kcal/Kg"
+          sliderValue={sliderValues.importKcal}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, importKcal: newValue }))}
+        />
+        {/* blue text start */}
+        <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
+          <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>GCV - Oil</Text>
+        </View>
+        {/* blue text end */}
+        <FuelSlider
+          energyName="LDO Kcal/Kg"
+          sliderValue={sliderValues.ldoKcal}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, ldoKcal: newValue }))}
+        />
+        <FuelSlider
+          energyName="FO Kcal/Kg"
+          sliderValue={sliderValues.foKcal}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, foKcal: newValue }))}
+        />
+        <View style={styles.smallSliderBottomContainer}>
+          <Text style={styles.sliderBottomText}>heat Rate Kcal/Kwh</Text>
+          <Text style={styles.sliderBottomText}>0.0</Text>
+        </View>
 
+        {/* blue text start */}
+        <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
+          <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Consumption</Text>
+        </View>
+        {/* blue text end */}
+        <FuelSlider
+          energyName="Domestic MT"
+          sliderValue={sliderValues.domesticMt}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, domesticMt: newValue }))}
+        />
+        <FuelSlider
+          energyName="Wash Coal MT"
+          sliderValue={sliderValues.washMt}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, washMt: newValue }))}
+        />
+        <FuelSlider
+          energyName="Import MT"
+          sliderValue={sliderValues.importMt}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, importMt: newValue }))}
+        />
+        <FuelSlider
+          energyName="LDO KL"
+          sliderValue={sliderValues.ldoKl}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, ldoKl: newValue }))}
+        />
+        <FuelSlider
+          energyName="FO KL"
+          sliderValue={sliderValues.foKl}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, foKl: newValue }))}
+        />
+        <FuelSlider
+          energyName="Other Charges/Adjustment Rs. Cr."
+          sliderValue={sliderValues.other}
+          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, other: newValue }))}
+        />
+        {/* blue text start */}
+        <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
+          <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Heat Content MKCal</Text>
+        </View>
+        {/* blue text end */}
+        <View style={styles.smallSliderBottomContainer}>
+          <Text style={styles.sliderBottomText}>LDO Heat Content MKCal</Text>
+          <Text style={styles.sliderBottomText}>0.00</Text>
+        </View>
+        <View style={styles.smallSliderBottomContainer}>
+          <Text style={styles.sliderBottomText}>FO Heat Content MKCal</Text>
+          <Text style={styles.sliderBottomText}>0.00</Text>
+        </View>
+        <View style={styles.smallSliderBottomContainer}>
+          <Text style={styles.sliderBottomText}>Coal Heat Content MKCal</Text>
+          <Text style={styles.sliderBottomText}>0.00</Text>
+        </View>
+        <View style={styles.smallSliderBottomContainer}>
+          <Text style={styles.sliderBottomText}>Total Heat Content MKCal</Text>
+          <Text style={styles.sliderBottomText}>0.00</Text>
+        </View>
+        <View style={styles.smallSliderBottomContainer}>
+          <Text style={styles.sliderBottomText}>Coal Consumption MT</Text>
+          <Text style={styles.sliderBottomText}>0.00</Text>
+        </View>
+        <View style={styles.smallSliderBottomContainer}>
+          <Text style={styles.sliderBottomText}>Gen Cost at Gen. Terminal Rs./Kwh</Text>
+          <Text style={styles.sliderBottomText}>0.00</Text>
+        </View>
         {/* slider End */}
       </View>
       {/* main content end */}

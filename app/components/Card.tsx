@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
-import { colors } from '@/components/color';
+import { colors } from '@/constant/color';
 import styles from '../css/style'
 
 const Card = ({ title, subTitle, value, progress, current, unit, meter, secondTitle, innerStroke }) => {

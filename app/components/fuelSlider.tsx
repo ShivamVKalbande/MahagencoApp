@@ -1,7 +1,7 @@
 import { View, Text, Dimensions } from 'react-native'
 import React, { useCallback, useRef, useState } from 'react'
 import Slider from '@react-native-community/slider'
-import { colors } from '@/components/color'
+import { colors } from '@/constant/color'
 
 const { width } = Dimensions.get('window');
 const FuelSlider = ({energyName, sliderValue, setSliderValue }) => {

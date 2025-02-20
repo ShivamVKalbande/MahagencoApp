@@ -6,7 +6,7 @@ import styles from '../css/style';
 import { colors } from '@/constant/color';
 
 const { height, width } = Dimensions.get('window');
-const SmallDropdown = ({ name, data, selectedItem, setSelectedItem }) => {
+const HrDropdown = ({ name, data, selectedItem, setSelectedItem }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -18,7 +18,7 @@ const SmallDropdown = ({ name, data, selectedItem, setSelectedItem }) => {
 
 
   return (
-    <View style={[styles.dropeDownContainer, { width: width * 0.25, margin: 1, }]}>
+    <View style={[styles.dropeDownContainer, { width: width * 0.25, margin: 1,  borderBottomWidth: 0, }]}>
       <View style={[styles.dropdownBox, { width: width * 0.25, top: 0, }]}>
         <TouchableOpacity
           style={[styles.dropdown, { width: width * 0.25 }]}
@@ -31,7 +31,7 @@ const SmallDropdown = ({ name, data, selectedItem, setSelectedItem }) => {
             fontSize: 12,
             textAlign: "center",
             justifyContent: 'center'
-          }]}>{selectedItem.label}</Text>
+          }]}>{selectedItem}</Text>
           <AntDesign name="down" size={15} color="black" />
         </TouchableOpacity>
         <Modal
@@ -74,4 +74,4 @@ const SmallDropdown = ({ name, data, selectedItem, setSelectedItem }) => {
   );
 };
 
-export default SmallDropdown;
+export default HrDropdown;
