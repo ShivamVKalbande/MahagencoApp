@@ -29,7 +29,7 @@ function CustomHeader() {
       <MaterialCommunityIcons
         name="dots-vertical"
         size={35}
-        color={colors.skyblue}
+        color={colors.white}
         style={{ left: width * 0.9 }}
       />
     </View>
@@ -48,8 +48,8 @@ export default function RootLayout() {
               headerShown: showHeader,
               headerTitle: title || undefined,
               headerTitleAlign: "center",
-              headerTitleStyle: { color: colors.skyblue },
-              headerTintColor: colors.skyblue,
+              headerTitleStyle: { color: colors.white },
+              headerTintColor: colors.white,
               headerBackground: showHeader ? CustomHeader : undefined,
             }}
           />

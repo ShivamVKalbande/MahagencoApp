@@ -22,13 +22,13 @@ const Home = () => {
                 {/* Header Container */}
                 <View style={styles.headerContainer}>
                     <Image
-                        source={image.logo}
+                        source={image.Whitelogo}
                         style={styles.logo}
                     />
                     <MaterialCommunityIcons
                         name={'dots-vertical'}
                         size={35}
-                        color={colors.skyblue}
+                        color={colors.white}
                         style={styles.menu}
                     />
                 </View>
@@ -44,6 +44,8 @@ const Home = () => {
                             progress={0.6}
                             current="150"
                             unit="Unit"
+                            aboveText="Current"
+                            belowText="Generation"
                             meter="Gain/Loss"
                             secondTitle=""
                             innerStroke={colors.red}
@@ -56,7 +58,9 @@ const Home = () => {
                             progress={0.6}
                             current="8,01,51,40,795"
                             unit="Rs"
-                            meter="Rs"
+                            aboveText="Budget"
+                            belowText="Consumed"
+                            meter=""
                             secondTitle="Budget Allocate"
                             innerStroke={colors.red}
                         />

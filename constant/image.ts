@@ -1,5 +1,6 @@
 export default {
-    logo: require('@/assets/images/mahagencoLogo.png'),
+    logo: require('@/assets/images/logo.png'),
+    Whitelogo: require('@/assets/images/mahagencoLogo.png'),
     operation: require('@/assets/images/operationIcon.png'),
     material: require('@/assets/images/materialIcon.png'),
     finance: require('@/assets/images/financeIcon.png'),

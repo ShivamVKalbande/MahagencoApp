@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, TextInput, FlatList, Dimensions } from 'r
 import Modal from 'react-native-modal';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import styles from '../css/style';
-import { colors } from '@/constant/color';
 
 const { height, width } = Dimensions.get('window');
 const SmallDropdown = ({ name, data, selectedItem, setSelectedItem }) => {
@@ -53,7 +52,8 @@ const SmallDropdown = ({ name, data, selectedItem, setSelectedItem }) => {
             <View style={styles.itemContainer}>
               <FlatList
                 data={filteredData}
-                keyExtractor={item => item.value}
+                // keyExtractor={item => item.value}
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={styles.item}

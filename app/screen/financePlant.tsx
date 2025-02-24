@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Dimensions } from 'react-native'
+import { View, Text, ScrollView, Dimensions, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import styles from '../css/style';
 import Dropdown from '../components/Dropdown';
@@ -36,7 +36,7 @@ const FinancePlant = () => {
         { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
     ];
     return (
-        <ScrollView style={styles.container}
+        <View style={styles.container}
             showsVerticalScrollIndicator={false}
         >
             {/* main content start */}
@@ -89,30 +89,32 @@ const FinancePlant = () => {
                     {/* table Headeing end */}
                     {/* Table Data Start */}
                     {
-                        fundTable.map((item, index) => (
-                            <View
-                                key={index}
-                                style={styles.tableData}>
-                                <View style={{ width: width * 0.3 }}>
-                                    <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.center}</Text>
+                        <FlatList
+                            data={fundTable}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => (
+                                <View style={styles.tableData}>
+                                    <View style={{ width: width * 0.3 }}>
+                                        <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.center}</Text>
+                                    </View>
+                                    <View style={{ width: width * 0.2 }}>
+                                        <Text style={styles.tableText}>{item.allocated}</Text>
+                                    </View>
+                                    <View style={{ width: width * 0.2 }}>
+                                        <Text style={styles.tableText}>{item.consumed}</Text>
+                                    </View>
+                                    <View style={{ width: width * 0.2 }}>
+                                        <Text style={styles.tableText}>{item.available}</Text>
+                                    </View>
                                 </View>
-                                <View style={{ width: width * 0.2 }}>
-                                    <Text style={styles.tableText}>{item.allocated}</Text>
-                                </View>
-                                <View style={{ width: width * 0.2 }}>
-                                    <Text style={styles.tableText}>{item.consumed}</Text>
-                                </View>
-                                <View style={{ width: width * 0.2 }}>
-                                    <Text style={styles.tableText}>{item.available}</Text>
-                                </View>
-                            </View>
-                        ))
+                            )}
+                            />
                     }
                     {/* Table Data End */}
                 </View>
                 {/* Table end */}
             </View>
-        </ScrollView>
+        </View>
     )
 }
 

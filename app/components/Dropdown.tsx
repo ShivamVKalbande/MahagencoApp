@@ -47,7 +47,8 @@ const Dropdown = ({ name, data, selectedItem, setSelectedItem }) => {
             <View style={styles.itemContainer}>
               <FlatList
                 data={filteredData}
-                keyExtractor={item => item.value}
+                // keyExtractor={item => item.value}
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={styles.item}

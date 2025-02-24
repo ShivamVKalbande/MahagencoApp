@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Dimensions } from 'react-native'
+import { View, Text, ScrollView, Dimensions, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import ScreenCard from '../components/ScreenCard'
 import { colors } from '@/constant/color';
@@ -40,25 +40,25 @@ const Hr = () => {
   const [selectedItemdesignation, setSelectedItemDesignation] = useState({ label: "Select Designation", value: "" })
 
   const hrTable = [
-    {designation:"Dy Gen Manager- F&A", sanctioned:"0", working:"1", vacancy:"0"},
-    {designation:"Gen Manager- F&A", sanctioned:"0", working:"1", vacancy:"0"},
-    {designation:"Executive Director", sanctioned:"0", working:"1", vacancy:"0"},
-    {designation:"Exe Director- IT", sanctioned:"0", working:"1", vacancy:"0"},
-    {designation:"Exe Director- civil", sanctioned:"0", working:"1", vacancy:"0"},
-    {designation:"Exe Director- Mechanical", sanctioned:"0", working:"1", vacancy:"0"},
-    {designation:"Exe Director- civil", sanctioned:"0", working:"1", vacancy:"0"},
-    {designation:"Exe Director- civil", sanctioned:"0", working:"1", vacancy:"0"},
-    {designation:"Exe Director- civil", sanctioned:"0", working:"1", vacancy:"0"},
-    {designation:"Exe Director- civil", sanctioned:"0", working:"1", vacancy:"0"},
-    {designation:"Exe Director- civil", sanctioned:"0", working:"1", vacancy:"0"},
+    { designation: "Dy Gen Manager- F&A", sanctioned: "0", working: "1", vacancy: "0" },
+    { designation: "Gen Manager- F&A", sanctioned: "0", working: "1", vacancy: "0" },
+    { designation: "Executive Director", sanctioned: "0", working: "1", vacancy: "0" },
+    { designation: "Exe Director- IT", sanctioned: "0", working: "1", vacancy: "0" },
+    { designation: "Exe Director- civil", sanctioned: "0", working: "1", vacancy: "0" },
+    { designation: "Exe Director- Mechanical", sanctioned: "0", working: "1", vacancy: "0" },
+    { designation: "Exe Director- civil", sanctioned: "0", working: "1", vacancy: "0" },
+    { designation: "Exe Director- civil", sanctioned: "0", working: "1", vacancy: "0" },
+    { designation: "Exe Director- civil", sanctioned: "0", working: "1", vacancy: "0" },
+    { designation: "Exe Director- civil", sanctioned: "0", working: "1", vacancy: "0" },
+    { designation: "Exe Director- civil", sanctioned: "0", working: "1", vacancy: "0" },
   ];
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {/* main content start */}
       <View style={styles.mainContainer}>
         {/* card start */}
         <ScreenCard
-          title="Year 224-2025"
+          title="Year 2024-2025"
           subTitle="Working"
           value={totalGeneration}
           progress={0.6}
@@ -121,24 +121,26 @@ const Hr = () => {
           {hrTable.length === 0 ? (
             <Text style={{ textAlign: 'center', padding: 10 }}>No Data Available</Text>
           ) : (
-            hrTable.map((item, index) => (
-              <View
-                key={index}
-                style={styles.tableData}>
-                <View style={{ width: width * 0.3 }}>
-                  <Text style={styles.tableText}>{item.designation}</Text>
+            <FlatList
+              data={hrTable}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.tableData}>
+                  <View style={{ width: width * 0.3 }}>
+                    <Text style={styles.tableText}>{item.designation}</Text>
+                  </View>
+                  <View style={{ width: width * 0.2 }}>
+                    <Text style={styles.tableText}>{item.sanctioned}</Text>
+                  </View>
+                  <View style={{ width: width * 0.2 }}>
+                    <Text style={styles.tableText}>{item.working}</Text>
+                  </View>
+                  <View style={{ width: width * 0.2 }}>
+                    <Text style={styles.tableText}>{item.vacancy}</Text>
+                  </View>
                 </View>
-                <View style={{ width: width * 0.2 }}>
-                  <Text style={styles.tableText}>{item.sanctioned}</Text>
-                </View>
-                <View style={{ width: width * 0.2 }}>
-                  <Text style={styles.tableText}>{item.working}</Text>
-                </View>
-                <View style={{ width: width * 0.2 }}>
-                  <Text style={styles.tableText}>{item.vacancy}</Text>
-                </View>
-              </View>
-            ))
+              )}
+            />
           )}
 
           {/* Table Data end */}
@@ -146,7 +148,7 @@ const Hr = () => {
         {/* Table End */}
       </View>
       {/* main content end */}
-    </ScrollView>
+    </View>
   )
 }
 

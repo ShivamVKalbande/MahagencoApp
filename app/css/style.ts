@@ -2,7 +2,7 @@ import { colors } from "@/constant/color";
 import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get('window');
-export default styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.lightblue,
@@ -57,7 +57,7 @@ export default styles = StyleSheet.create({
     },
     textContainer: {
         gap: 10,
-        width: width * 0.5,
+        width: width * 0.45,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
         paddingBottom: 10,
@@ -215,7 +215,7 @@ export default styles = StyleSheet.create({
         left:0,
     },
     sliderContainer:{
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.2,
         paddingVertical:5,
         borderColor:colors.gray,
     },
@@ -242,7 +242,7 @@ export default styles = StyleSheet.create({
     },
     fuelSliderBox:{
         flex: 1,
-        borderBottomWidth:1,
+        borderBottomWidth:0.2,
         borderColor:colors.gray,
         paddingBottom:10,
         marginBottom:10,
@@ -399,7 +399,7 @@ export default styles = StyleSheet.create({
         justifyContent: 'space-between', 
         width:width*0.85,
         paddingVertical:10,
-        borderBottomWidth:1,
+        borderBottomWidth:0.2,
         borderBottomColor:colors.gray,
         marginBottom:10,
     },
@@ -418,3 +418,5 @@ export default styles = StyleSheet.create({
         height:60,
     },
 });
+
+export default styles;

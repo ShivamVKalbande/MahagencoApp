@@ -4,7 +4,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { colors } from '@/constant/color';
 import styles from '../css/style'
 
-const Card = ({ title, subTitle, value, progress, current, unit, meter, secondTitle, innerStroke }) => {
+const Card = ({ title, subTitle, value, progress, current, meter, secondTitle, innerStroke, belowText, aboveText, unit }) => {
   const size = 100; // Size of the circle
   const strokeWidth = 5; // Thickness of the stroke
   const radius = (size - strokeWidth) / 2;
@@ -52,8 +52,8 @@ const Card = ({ title, subTitle, value, progress, current, unit, meter, secondTi
           />
         </Svg>
         <View style={[styles.circleText, { top: 20 }]}>
-          <Text style={styles.smallLabel}>Current</Text>
-          <Text style={styles.smallLabel}>{unit}</Text>
+          <Text style={styles.smallLabel}>{aboveText}</Text>
+          <Text style={styles.smallLabel}>{belowText}</Text>
           <Text style={[styles.smallLabel, { fontWeight: 'bold' }]}>{current}</Text>
           <Text style={styles.smallLabel}>{unit}</Text>
         </View>

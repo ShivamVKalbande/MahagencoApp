@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Dimensions } from 'react-native'
+import { View, Text, ScrollView, Dimensions, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import styles from '../css/style';
 import Dropdown from '../components/Dropdown';
@@ -9,9 +9,9 @@ import { useRoute } from '@react-navigation/native';
 const { width } = Dimensions.get('window');
 const ProjectDetail = () => {
 
-      const route = useRoute();
-      const { projectNumber } = route.params || {};
-      const { projectName } = route.params || {};
+    const route = useRoute();
+    const { projectNumber } = route.params || {};
+    const { projectName } = route.params || {};
 
     const [plant, setPlant] = useState([{ label: "MAHAGENCO", value: "" }]);
     const [selectedItem, setSelectedItem] = useState(plant[0]);
@@ -25,7 +25,7 @@ const ProjectDetail = () => {
     const [totalGainLoss, setTotalGainLoss] = useState(1031314674980);
 
 
-    const Table = [
+    const ProjectTable = [
         { project: "T1010HOU05", capacity: 0.0, cost: 0.0, compilations: 0.0 },
         { project: "T1010HOU05", capacity: 0.0, cost: 0.0, compilations: 0.0 },
         { project: "T1010HOU05", capacity: 0.0, cost: 0.0, compilations: 0.0 },
@@ -42,8 +42,7 @@ const ProjectDetail = () => {
         { project: "T1010HOU05", capacity: 0.0, cost: 0.0, compilations: 0.0 },
     ];
     return (
-        <ScrollView style={styles.container}
-            showsVerticalScrollIndicator={false}
+        <View style={styles.container}
         >
             {/* main content start */}
             <View style={styles.mainContainer}>
@@ -79,7 +78,7 @@ const ProjectDetail = () => {
                 {/* card end */}
                 {/* Plants header text start */}
                 <View style={styles.plantHeaderContainer}>
-                    <Text style={styles.departmentHeading}>{ projectName } :</Text>
+                    <Text style={styles.departmentHeading}>{projectName} :</Text>
                 </View>
                 {/* Plants header text End */}
                 {/* Table start */}
@@ -94,30 +93,32 @@ const ProjectDetail = () => {
                     {/* table Headeing end */}
                     {/* Table Data Start */}
                     {
-                        Table.map((item, index) => (
-                            <View
-                                key={index}
-                                style={styles.tableData}>
-                                <View style={{ width: width * 0.225 }}>
-                                    <Text style={[styles.tableText, { fontWeight: 'bold', color: colors.skyblue }]}>{item.project}</Text>
+                        <FlatList
+                            data={ProjectTable}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => (
+                                <View style={styles.tableData}>
+                                    <View style={{ width: width * 0.225 }}>
+                                        <Text style={[styles.tableText, { fontWeight: 'bold', color: colors.skyblue }]}>{item.project}</Text>
+                                    </View>
+                                    <View style={{ width: width * 0.225 }}>
+                                        <Text style={styles.tableText}>{item.capacity}</Text>
+                                    </View>
+                                    <View style={{ width: width * 0.225 }}>
+                                        <Text style={styles.tableText}>{item.cost}</Text>
+                                    </View>
+                                    <View style={{ width: width * 0.225 }}>
+                                        <Text style={styles.tableText}>{item.compilations}</Text>
+                                    </View>
                                 </View>
-                                <View style={{ width: width * 0.225 }}>
-                                    <Text style={styles.tableText}>{item.capacity}</Text>
-                                </View>
-                                <View style={{ width: width * 0.225 }}>
-                                    <Text style={styles.tableText}>{item.cost}</Text>
-                                </View>
-                                <View style={{ width: width * 0.225 }}>
-                                    <Text style={styles.tableText}>{item.compilations}</Text>
-                                </View>
-                            </View>
-                        ))
+                            )}
+                        />
                     }
                     {/* Table Data End */}
                 </View>
                 {/* Table end */}
             </View>
-        </ScrollView>
+        </View>
     )
 }
 

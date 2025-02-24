@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Dimensions } from 'react-native'
+import { View, Text, ScrollView, Dimensions, FlatList } from 'react-native'
 import React, { useMemo, useState } from 'react'
 import Dropdown from '../components/Dropdown'
 import styles from '../css/style';
@@ -49,7 +49,7 @@ const Bunker = () => {
     { week: 4, consumption: 32154.00, afb: 3214.11 },
   ];
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {/* main content start */}
       <View style={styles.mainContainer}>
         {/* dropdown start */}
@@ -119,30 +119,32 @@ const Bunker = () => {
           {bunkarTable.length === 0 ? (
             <Text style={{ textAlign: 'center', padding: 10 }}>No Bunker Data Available</Text>
           ) : (
-            bunkarTable.map((item, index) => (
-              <View
-                key={index}
-                style={styles.tableData}>
-                <View style={{ width: width * 0.3 }}>
-                  <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.week}</Text>
+            <FlatList
+              data={bunkarTable}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.tableData}>
+                  <View style={{ width: width * 0.3 }}>
+                    <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.week}</Text>
+                  </View>
+                  <View style={{ width: width * 0.3 }}>
+                    <Text style={styles.tableText}>{item.consumption}</Text>
+                  </View>
+                  <View style={{ width: width * 0.3 }}>
+                    <Text style={styles.tableText}>{item.afb}</Text>
+                  </View>
                 </View>
-                <View style={{ width: width * 0.3 }}>
-                  <Text style={styles.tableText}>{item.consumption}</Text>
-                </View>
-                <View style={{ width: width * 0.3 }}>
-                  <Text style={styles.tableText}>{item.afb}</Text>
-                </View>
-              </View>
-            ))
+              )}
+            />
           )}
 
           {/* Table Data end */}
         </View>
         {/* Table End */}
-        <View style={{height:height*0.4, backgroundColor:colors.white}}></View>
+        <View style={{ height: height * 0.4, backgroundColor: colors.white }}></View>
       </View>
       {/* main content end */}
-    </ScrollView>
+    </View>
   )
 }
 

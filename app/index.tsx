@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { colors } from '../constant/color';
 import { useNavigation } from '@react-navigation/native';
 import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
@@ -31,6 +31,12 @@ const HomeScreen = () => {
       setErrorMessage('Invalid User ID or Password');
     }
   };
+
+  // const date = Date();
+  // console.log("current date",date);
+
+  // const [sample, setsample] = useState(2008-09-22 15:24:13.790);
+
   return (
     <SafeAreaView  style={styles.container}>   
     <StatusBar barStyle="dark-content" />
@@ -52,6 +58,7 @@ const HomeScreen = () => {
               // console.log('Email:', text); // Log the email input
             }}
           />
+          {/* <Text>{ finalDate }</Text> */}
         </View>
         <View style={styles.inputContainer}>
           <SimpleLineIcons name={'lock'} size={29} color={colors.secondary} />

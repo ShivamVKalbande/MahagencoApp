@@ -1,10 +1,11 @@
-import { View, Text, ScrollView, Dimensions } from 'react-native'
+import { View, Dimensions, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Dropdown from '../components/Dropdown'
 import MaterialCard from '../components/MaterialCard';
 import { useMutation } from '@tanstack/react-query';
 import { getPlant } from '../api/operation';
 import { getPo, getPr } from '../api/materials';
+import styles from '../css/style';
 
 
 const { height } = Dimensions.get('window');
@@ -23,12 +24,12 @@ const Material = () => {
   const [release, setRelease]= useState(0);
   const [complete, setComplete]= useState(0);
   const [count, setCount] = useState(0);
-  const [total, setTotal] = useState("");
+  const [total, setTotal] = useState("0");
   const [prActive, setPrActive]= useState(0);
   const [prRelease, setPrRelease]= useState(0);
   const [prComplete, setPrComplete]= useState(0);
   const [prCount, setPrCount] = useState(0);
-  const [prTotal, setPrTotal] = useState("");
+  const [prTotal, setPrTotal] = useState("0");
  
   const getPlatMutation = useMutation({
     mutationFn: () => getPlant(),
@@ -61,12 +62,16 @@ const Material = () => {
         setRelease(Number(data.InRelease) || 0);
         setComplete(Number(data.Completed) || 0);
         setCount(Number(data.Count) || 0);
-        setTotal(data.Total || 0);
+        setTotal(data.Total || "0");
       },
       onError: (error) => {
         console.error("Error fetching Po data:", error);
       },
     });
+
+    // if (getPoMutation.isPending) {
+    //   return <ActivityIndicator />;
+    // }
 
     const getPrMutation = useMutation({
       mutationFn: () => getPr(selectedItem?.value),
@@ -79,13 +84,15 @@ const Material = () => {
         setPrRelease(Number(data.InRelease) || 0);
         setPrComplete(Number(data.Completed) || 0);
         setPrCount(Number(data.Count) || 0);
-        setPrTotal(data.Total || 0);
+        setPrTotal(data.Total || "0");
       },
       onError: (error) => {
         console.error("Error fetching Po data:", error);
       },
     });
-
+    // if (getPrMutation.isPending) {
+    //   return <ActivityIndicator />;
+    // }
    
     useEffect(() => {
       if (selectedItem?.value) {
@@ -95,8 +102,7 @@ const Material = () => {
     }, [selectedItem]);
 
   return (
-    <ScrollView style={styles.container}
-    showsVerticalScrollIndicator={false}
+    <View style={styles.container}
     >
       {/* main content start */}
       <View style={[styles.mainContainer, {height:height*0.95}]}>
@@ -144,7 +150,7 @@ const Material = () => {
         {/* card end */}
       </View>
       {/* main content end */}
-    </ScrollView>
+    </View>
   )
 }
 
