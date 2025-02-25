@@ -9,6 +9,7 @@ const { width, height } = Dimensions.get("window");
 
 const screens = [
   { name: "index", showHeader: false },
+  { name: "screen/otp", showHeader: false },
   { name: "screen/home", showHeader: false },
   { name: "screen/operations", title: "OPERATIONS" },
   { name: "screen/projects", title: "PROJECTS" },

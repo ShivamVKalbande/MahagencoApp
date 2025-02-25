@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Dimensions, FlatList } from 'react-native'
+import { View, Text, ScrollView, Dimensions, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import styles from '../css/style';
 import Dropdown from '../components/Dropdown';
@@ -27,6 +27,7 @@ const FinancePlant = () => {
     const [selectedItemCenter, setSelectedItemCenter] = useState(fundcenter[0]);
     const [tableResult, setTableResult] = useState("");
     const [fundTable, setFundTable] = useState([]);
+    const [selectedRowIndex, setSelectedRowIndex] = useState(null);
     // get card details 
     const getFinanceCardMutation = useMutation({
         mutationFn: () => financeCard(),
@@ -42,20 +43,20 @@ const FinancePlant = () => {
     }, []);
 
     //get table data 
-     const postTableMutation = useMutation({
+    const postTableMutation = useMutation({
         mutationFn: () => fundTableData(selectedItem.value, selectedItemCenter.value),
         onSuccess: (data) => {
-          setTableResult(data.result);
-          setFundTable(data.data);
+            setTableResult(data.result);
+            setFundTable(data.data);
         },
-      })
-      
-      useEffect(() => {
+    })
+
+    useEffect(() => {
         postTableMutation.mutate();
-      }, [selectedItem, selectedItemCenter]);
+    }, [selectedItem, selectedItemCenter]);
     return (
         <View style={styles.container}
-            // showsVerticalScrollIndicator={false}
+        // showsVerticalScrollIndicator={false}
         >
             {/* main content start */}
             <View style={styles.mainContainer}>
@@ -107,28 +108,40 @@ const FinancePlant = () => {
                     </View>
                     {/* table Headeing end */}
                     {/* Table Data Start */}
-                    {
+                    {postTableMutation.isPending ? (
+                        <ActivityIndicator size="large" color={colors.primary} style={{ marginVertical: 20 }} />
+                    ) : fundTable.length === 0 ? (
+                        <Text style={{ textAlign: 'center', padding: 10 }}>No Bunker Data Available</Text>
+                    ) : (
                         <FlatList
                             data={fundTable}
                             keyExtractor={(item, index) => index.toString()}
-                            renderItem={({ item }) => (
-                                <View style={styles.tableData}>
-                                    <View style={{ width: width * 0.3 }}>
-                                        <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.fund_center}</Text>
+                            renderItem={({ item, index  }) => (
+                                // <TouchableOpacity
+                                //     onPress={() => setSelectedRowIndex(index)}
+                                //     style={[
+                                //         styles.tableData,
+                                //         selectedRowIndex === index && { backgroundColor: colors.lightGray } // Change color when selected
+                                //     ]}
+                                // >
+                                    <View style={styles.tableData}>
+                                        <View style={{ width: width * 0.3 }}>
+                                            <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.fund_center}</Text>
+                                        </View>
+                                        <View style={{ width: width * 0.2 }}>
+                                            <Text style={styles.tableText}>{item.Consumable}</Text>
+                                        </View>
+                                        <View style={{ width: width * 0.2 }}>
+                                            <Text style={styles.tableText}>{item.consumed_budget}</Text>
+                                        </View>
+                                        <View style={{ width: width * 0.2 }}>
+                                            <Text style={styles.tableText}>{item.available_amount}</Text>
+                                        </View>
                                     </View>
-                                    <View style={{ width: width * 0.2 }}>
-                                        <Text style={styles.tableText}>{item.Consumable}</Text>
-                                    </View>
-                                    <View style={{ width: width * 0.2 }}>
-                                        <Text style={styles.tableText}>{item.consumed_budget}</Text>
-                                    </View>
-                                    <View style={{ width: width * 0.2 }}>
-                                        <Text style={styles.tableText}>{item.available_amount}</Text>
-                                    </View>
-                                </View>
+                                // </TouchableOpacity>
                             )}
                         />
-                    }
+                    )}
                     {/* Table Data End */}
                 </View>
                 {/* Table end */}

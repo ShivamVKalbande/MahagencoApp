@@ -13,6 +13,8 @@ import { colors } from '../constant/color';
 import { useNavigation } from '@react-navigation/native';
 import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 import image from '@/constant/image';
+import { useMutation } from '@tanstack/react-query';
+import { login } from './api/login';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -21,15 +23,26 @@ const HomeScreen = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleLogin = () => {
-    const trimmedEmail = email.trim();
-    const trimmedPassword = password.trim();
+  const postLoginMutation = useMutation({
+    mutationFn: () => login(email.trim(), password.trim()),
+    onSuccess: (data) => {
+      if (data) {
+        const success = data.success;
+        const actualOtp = data.otp;
+        if (success) {
+        navigation.navigate('screen/otp', { actualOtp: actualOtp });
+        // navigation.navigate('screen/home');
+        } else {
+          setErrorMessage('Invalid User ID or Password');
+        }
+      } else {
+        setErrorMessage('Invalid User ID or Password');
+      }
+    },
+  });
 
-    if (trimmedEmail === '1001' && trimmedPassword === 'Admin@1234') {
-      navigation.navigate('screen/home');
-    } else {
-      setErrorMessage('Invalid User ID or Password');
-    }
+  const handleLogin = () => {
+    postLoginMutation.mutate();
   };
 
   // const date = Date();

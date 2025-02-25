@@ -13,9 +13,9 @@ const Material = () => {
   const [plant, setPlant] = useState([{ label: "MAHAGENCO", value: "mahagenco" }]);
     // const [duration, setDuration] = useState([{ label: "Year", value: "year" }]);
     const duration = [
-      { label: "Year", value: "year" },
-      { label: "Month", value: "month" },
-      { label: "Day", value: "day" },
+      { label: "YEAR", value: "year" },
+      { label: "MONTH", value: "month" },
+      { label: "DAY", value: "day" },
     ]
   const [selectedItem, setSelectedItem] = useState(plant[0]);
   const [selectedItemTime, setSelectedItemTime] = useState(duration[0]);
