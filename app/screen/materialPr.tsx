@@ -176,7 +176,7 @@ const MaterialPr = () => {
       setPrTableTotal(data.total);
     },
   })
-  4
+  
   useEffect(() => {
     postPrMutation.mutate();
   }, [selectedItem, selectedItemPr, selectedItemDoc, selectedItemPrNumber, selectedItemFromDate, selectedItemToDate]);

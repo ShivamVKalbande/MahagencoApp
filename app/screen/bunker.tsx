@@ -1,10 +1,13 @@
 import { View, Text, ScrollView, Dimensions, FlatList } from 'react-native'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Dropdown from '../components/Dropdown'
 import styles from '../css/style';
 import ScreenCard from '../components/ScreenCard';
 import { colors } from '@/constant/color';
 import SmallDropdown from '../components/SmallDropdown';
+import { useMutation } from '@tanstack/react-query';
+import { getPlant, getUnit } from '../api/operation';
+import { bunkerTableData } from '../api/bunker';
 
 const { width, height } = Dimensions.get('window');
 const Bunker = () => {
@@ -20,34 +23,83 @@ const Bunker = () => {
   const [totalGainLoss, setTotalGainLoss] = useState(1031314674980);
 
   const month = [
-    { label: "January", value: "1" },
-    { label: "February", value: "2" },
-    { label: "March", value: "3" },
-    { label: "April", value: "4" },
-    { label: "May", value: "5" },
-    { label: "June", value: "6" },
-    { label: "July", value: "7" },
-    { label: "August", value: "8" },
-    { label: "September", value: "9" },
-    { label: "October", value: "10" },
-    { label: "November", value: "11" },
-    { label: "December", value: "12" },
+    { label: "January", value: "jan" },
+    { label: "February", value: "feb" },
+    { label: "March", value: "mar" },
+    { label: "April", value: "apr" },
+    { label: "May", value: "may" },
+    { label: "June", value: "jun" },
+    { label: "July", value: "jul" },
+    { label: "August", value: "aug" },
+    { label: "September", value: "sep" },
+    { label: "October", value: "oct" },
+    { label: "November", value: "nov" },
+    { label: "December", value: "dec" },
   ];
   const [selectedItemMonth, setSelectedItemMonth] = useState(month[0]);
 
-  const unit = [
-    { label: "Unit 1", value: "unit1" },
-    { label: "Unit 2", value: "unit2" },
-    { label: "Unit 3", value: "unit3" },
-  ];
+  const [unit, setUnit] = useState([{ label: "Unit", value: "" }]);
   const [selectedItemUnit, setSelectedItemUnit] = useState(unit[0]);
+  const [bunkarTable, setBunkarTable] = useState([]);
 
-  const bunkarTable = [
-    { week: 1, consumption: 32154.00, afb: 3214.11 },
-    { week: 2, consumption: 32154.00, afb: 3214.11 },
-    { week: 3, consumption: 32154.00, afb: 3214.11 },
-    { week: 4, consumption: 32154.00, afb: 3214.11 },
-  ];
+  // get plant list
+  const getPlatMutation = useMutation({
+    mutationFn: () => getPlant(),
+    onSuccess: (data) => {
+      if (!data || !Array.isArray(data)) {
+        console.error("Invalid plant API response");
+        return;
+      }
+
+      const plantList = data.map((item) => ({
+        label: item.plant,
+        value: item.plant.toLowerCase(),
+      }));
+      setPlant(plantList);
+    },
+  });
+
+  useEffect(() => {
+    getPlatMutation.mutate(); 
+  }, []);
+
+  // get unit list 
+    const getUnitMutation = useMutation({
+      mutationFn: () => getUnit(selectedItem?.value),
+      onSuccess: (data) => {
+        if (!data || !Array.isArray(data)) {
+          console.error("Invalid unit API response");
+          return;
+        }
+  
+        const unitList = data.map((item) => ({
+          label: item.Unit,
+          value: item.Unit.toLowerCase(),
+        }));
+  
+        setUnit(unitList);
+      }
+    });
+
+    useEffect(() => {
+       if (selectedItem?.value) {
+         getUnitMutation.mutate(); // Fetch units when plant changes
+       }
+     }, [selectedItem?.value]);
+
+     //get table data 
+          const postTableMutation = useMutation({
+             mutationFn: () => bunkerTableData(selectedItem.value, selectedItemUnit.value, selectedItemMonth.value),
+             onSuccess: (data) => {
+               setTableResult(data.result);
+               setFundTable(data.data);
+             },
+           })
+           
+           useEffect(() => {
+             postTableMutation.mutate();
+           }, [selectedItem, selectedItemCenter]);
+
   return (
     <View style={styles.container}>
       {/* main content start */}

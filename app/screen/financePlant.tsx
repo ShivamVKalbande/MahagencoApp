@@ -1,13 +1,18 @@
 import { View, Text, ScrollView, Dimensions, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../css/style';
 import Dropdown from '../components/Dropdown';
-import ScreenCard from '../components/ScreenCard';
 import { colors } from '@/constant/color';
+import { useRoute } from '@react-navigation/native';
+import FinanceCard from '../components/financeCard';
+import { useMutation } from '@tanstack/react-query';
+import { financeCard, fundTableData } from '../api/finance';
 
 const { width } = Dimensions.get('window');
 const FinancePlant = () => {
-    const [plant, setPlant] = useState([{ label: "MAHAGENCO", value: "" }]);
+    const route = useRoute();
+    const { plantName } = route.params || {};
+    const [plant, setPlant] = useState([{ label: plantName, value: plantName }]);
     const [selectedItem, setSelectedItem] = useState(plant[0]);
     const duration = [
         { label: "Year", value: "year" },
@@ -15,29 +20,42 @@ const FinancePlant = () => {
         { label: "Day", value: "day" },
     ]
     const [selectedItemTime, setSelectedItemTime] = useState(duration[0]);
-    const [totalGeneration, setTotalGeneration] = useState(901776516540);
-    const [totalGainLoss, setTotalGainLoss] = useState(1031314674980);
+    const [budget, setBudget] = useState("");
+    const [consumable, setConsumable] = useState("");
+    const [available, setAvailable] = useState("");
+    const [fundcenter, setFundcenter] = useState([{ label: "Filter Data", value: "" }]);
+    const [selectedItemCenter, setSelectedItemCenter] = useState(fundcenter[0]);
+    const [tableResult, setTableResult] = useState("");
+    const [fundTable, setFundTable] = useState([]);
+    // get card details 
+    const getFinanceCardMutation = useMutation({
+        mutationFn: () => financeCard(),
+        onSuccess: (data) => {
+            setAvailable(data.Available)
+            setConsumable(data.Consumable)
+            setBudget(data.budget)
+        },
+    });
 
+    useEffect(() => {
+        getFinanceCardMutation.mutate();
+    }, []);
 
-    const fundTable = [
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-        { center: "T1010HOU05", allocated: 0.0, consumed: 0.0, available: 0.0 },
-    ];
+    //get table data 
+     const postTableMutation = useMutation({
+        mutationFn: () => fundTableData(selectedItem.value, selectedItemCenter.value),
+        onSuccess: (data) => {
+          setTableResult(data.result);
+          setFundTable(data.data);
+        },
+      })
+      
+      useEffect(() => {
+        postTableMutation.mutate();
+      }, [selectedItem, selectedItemCenter]);
     return (
         <View style={styles.container}
-            showsVerticalScrollIndicator={false}
+            // showsVerticalScrollIndicator={false}
         >
             {/* main content start */}
             <View style={styles.mainContainer}>
@@ -58,12 +76,13 @@ const FinancePlant = () => {
                 </View>
                 {/* dropdown end */}
                 {/* card start */}
-                <ScreenCard
+                <FinanceCard
                     title="FY 2024-2025"
                     subTitle="Budget Allocate"
-                    value={totalGeneration}
+                    value={available}
                     progress={0.6}
-                    current={totalGainLoss}
+                    current={budget}
+                    circleValue={consumable}
                     unit="Rs"
                     meter="Rs"
                     secondTitle="Budget Allocate"
@@ -95,20 +114,20 @@ const FinancePlant = () => {
                             renderItem={({ item }) => (
                                 <View style={styles.tableData}>
                                     <View style={{ width: width * 0.3 }}>
-                                        <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.center}</Text>
+                                        <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.fund_center}</Text>
                                     </View>
                                     <View style={{ width: width * 0.2 }}>
-                                        <Text style={styles.tableText}>{item.allocated}</Text>
+                                        <Text style={styles.tableText}>{item.Consumable}</Text>
                                     </View>
                                     <View style={{ width: width * 0.2 }}>
-                                        <Text style={styles.tableText}>{item.consumed}</Text>
+                                        <Text style={styles.tableText}>{item.consumed_budget}</Text>
                                     </View>
                                     <View style={{ width: width * 0.2 }}>
-                                        <Text style={styles.tableText}>{item.available}</Text>
+                                        <Text style={styles.tableText}>{item.available_amount}</Text>
                                     </View>
                                 </View>
                             )}
-                            />
+                        />
                     }
                     {/* Table Data End */}
                 </View>
