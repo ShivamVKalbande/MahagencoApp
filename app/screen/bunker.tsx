@@ -236,7 +236,7 @@ const Bunker = () => {
           {/* Table Data end */}
         </View>
         {/* Table End */}
-        <View style={{ height: height * 0.4, backgroundColor: colors.white }}></View>
+        <View style={{ height: height * 0.3, backgroundColor: colors.white }}></View>
       </View>
       {/* main content end */}
     </View>

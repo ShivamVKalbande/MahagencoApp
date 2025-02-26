@@ -16,6 +16,7 @@ const screens = [
   { name: "screen/material", title: "MATERIALS" },
   { name: "screen/finance", title: "FINANCE" },
   { name: "screen/fuel", title: "FUEL/COAL" },
+  { name: "screen/fuelCombination", title: "FUEL COMBINATION" },
   { name: "screen/bunker", title: "BUNKER COAL" },
   { name: "screen/hr", title: "HR DEPARTMENT" },
   { name: "screen/materialPo", title: "Material PO" },

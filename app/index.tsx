@@ -30,8 +30,8 @@ const HomeScreen = () => {
         const success = data.success;
         const actualOtp = data.otp;
         if (success) {
-        navigation.navigate('screen/otp', { actualOtp: actualOtp });
-        // navigation.navigate('screen/home');
+        // navigation.navigate('screen/otp', { actualOtp: actualOtp });
+        navigation.navigate('screen/home');
         } else {
           setErrorMessage('Invalid User ID or Password');
         }
@@ -64,7 +64,7 @@ const HomeScreen = () => {
             style={styles.TextInput}
             placeholder="Enter User ID"
             placeholderTextColor={colors.secondary}
-            // keyboardType="email-address"
+            keyboardType="numeric"
             value={email}
             onChangeText={text => {
               setEmail(text);

@@ -417,6 +417,24 @@ const styles = StyleSheet.create({
         width:60,
         height:60,
     },
+
+    //input box
+    inputContainer: {
+        borderWidth: 1,
+        borderColor: colors.secondary,
+        borderRadius: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin:10,
+        width:width*0.25
+      },
+      TextInput: {
+        flex: 1,
+        paddingHorizontal: 10,
+      },
+      combinationContainer:{
+        margin:10
+      },
 });
 
 export default styles;

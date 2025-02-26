@@ -1,13 +1,15 @@
-import { View, Text, ScrollView, Dimensions } from 'react-native'
+import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import Dropdown from '../components/Dropdown'
 import { colors } from '@/constant/color';
 import styles from '../css/style';
 import Slider from '@react-native-community/slider';
 import FuelSlider from '../components/fuelSlider';
+import { useNavigation } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 const Fuel = () => {
+   const navigation = useNavigation();
   const [plant, setPlant] = useState([{ label: "MAHAGENCO", value: "mahagenco" }]);
   const duration = useMemo(() => [
     { label: "Year", value: "year" },
@@ -91,7 +93,17 @@ const Fuel = () => {
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ fontWeight: 'bold' }}>Enery Charges:</Text>
             <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>0.00 Rs./Kwh</Text>
+            <TouchableOpacity
+               onPress={() => navigation.navigate("screen/fuelCombination")}
+              style={[styles.plantButton, { left: width*0.15,  paddingHorizontal:15}]}
+            >
+              <Text style={[
+                styles.smallLabel,
+                { color: colors.white }]}
+              >Fuel Combination</Text>
+            </TouchableOpacity>
           </View>
+
         </View>
         {/* heading end */}
         {/* slider Start */}
