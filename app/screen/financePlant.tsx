@@ -6,7 +6,8 @@ import { colors } from '@/constant/color';
 import { useRoute } from '@react-navigation/native';
 import FinanceCard from '../components/financeCard';
 import { useMutation } from '@tanstack/react-query';
-import { financeCard, fundTableData } from '../api/finance';
+import { financeCard, fundCenterData, fundTableData } from '../api/finance';
+import HrDropdown from '../components/hrDropdown';
 
 const { width } = Dimensions.get('window');
 const FinancePlant = () => {
@@ -42,6 +43,22 @@ const FinancePlant = () => {
         getFinanceCardMutation.mutate();
     }, []);
 
+    // get fund center data 
+    const postFundCenterMutation = useMutation({
+        mutationFn: () => fundCenterData(selectedItem.value),
+        onSuccess: (data) => {
+            const fund = data.result;
+            const fundList = fund.map((item) => ({
+                label: item.FUND_CENTER,
+                value: item.FUND_CENTER,
+              }));
+              setFundcenter(fundList);
+        },
+    })
+
+    useEffect(() => {
+        postFundCenterMutation.mutate();
+    }, []);
     //get table data 
     const postTableMutation = useMutation({
         mutationFn: () => fundTableData(selectedItem.value, selectedItemCenter.value),
@@ -91,6 +108,16 @@ const FinancePlant = () => {
                     circleHeading="Budget Consumed"
                 />
                 {/* card end */}
+                {/* fund center dropdown start */}
+                <View style={styles.smallDropdownContainer}>
+                    <HrDropdown
+                        name="Fund Center"
+                        data={Array.isArray(fundcenter) ? fundcenter : []}
+                        selectedItem={selectedItemCenter.label}
+                        setSelectedItem={setSelectedItemCenter}
+                    />
+                </View>
+                {/* fund center dropdown end */}
                 {/* Plants header text start */}
                 <View style={styles.plantHeaderContainer}>
                     <Text style={styles.departmentHeading}>Fund Center :</Text>
@@ -111,12 +138,12 @@ const FinancePlant = () => {
                     {postTableMutation.isPending ? (
                         <ActivityIndicator size="large" color={colors.primary} style={{ marginVertical: 20 }} />
                     ) : fundTable.length === 0 ? (
-                        <Text style={{ textAlign: 'center', padding: 10 }}>No Bunker Data Available</Text>
+                        <Text style={{ textAlign: 'center', padding: 10 }}>No Data Available</Text>
                     ) : (
                         <FlatList
                             data={fundTable}
                             keyExtractor={(item, index) => index.toString()}
-                            renderItem={({ item, index  }) => (
+                            renderItem={({ item, index }) => (
                                 // <TouchableOpacity
                                 //     onPress={() => setSelectedRowIndex(index)}
                                 //     style={[
@@ -124,20 +151,20 @@ const FinancePlant = () => {
                                 //         selectedRowIndex === index && { backgroundColor: colors.lightGray } // Change color when selected
                                 //     ]}
                                 // >
-                                    <View style={styles.tableData}>
-                                        <View style={{ width: width * 0.3 }}>
-                                            <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.fund_center}</Text>
-                                        </View>
-                                        <View style={{ width: width * 0.2 }}>
-                                            <Text style={styles.tableText}>{item.Consumable}</Text>
-                                        </View>
-                                        <View style={{ width: width * 0.2 }}>
-                                            <Text style={styles.tableText}>{item.consumed_budget}</Text>
-                                        </View>
-                                        <View style={{ width: width * 0.2 }}>
-                                            <Text style={styles.tableText}>{item.available_amount}</Text>
-                                        </View>
+                                <View style={styles.tableData}>
+                                    <View style={{ width: width * 0.3 }}>
+                                        <Text style={[styles.tableText, { fontWeight: 'bold' }]}>{item.fund_center}</Text>
                                     </View>
+                                    <View style={{ width: width * 0.2 }}>
+                                        <Text style={styles.tableText}>{item.Consumable}</Text>
+                                    </View>
+                                    <View style={{ width: width * 0.2 }}>
+                                        <Text style={styles.tableText}>{item.consumed_budget}</Text>
+                                    </View>
+                                    <View style={{ width: width * 0.2 }}>
+                                        <Text style={styles.tableText}>{item.available_amount}</Text>
+                                    </View>
+                                </View>
                                 // </TouchableOpacity>
                             )}
                         />

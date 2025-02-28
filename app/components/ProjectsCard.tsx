@@ -25,22 +25,21 @@ const ProjectsCard = ({projectNumber, projectName, capacity, cost, bgColor }) =>
       </View>
       {/* Card Body */}
       <View style={styles.plantCard}>
-        <View style={[styles.plantBodycontainer, { width: width * 0.2, height: 60 }]}>
+        <View style={[styles.plantBodycontainer, { width: width * 0.11, height: 50 }]}>
           <Text style={{ fontWeight: 'bold', color: bgColor, fontSize: 26, textAlign: 'center' }}>{projectNumber}</Text>
         </View>
-        <View style={[styles.plantBodycontainer, { width: width * 0.2, height: 60 }]}>
+        <View style={[styles.plantBodycontainer, { width: width * 0.15, height: 50 }]}>
           <Text>No. of</Text>
           <Text>Projects</Text>
         </View>
-        <View style={[styles.plantBodycontainer, { width: width * 0.2, height: 60 }]}>
+        <View style={[styles.plantBodycontainer, { width: width * 0.26, height: 50 }]}>
           <Text>Total Capacity</Text>
           <Text style={{ fontWeight: 'bold' }}>{capacity}</Text>
         </View>
-        <View style={[styles.plantBodycontainer, { borderRightWidth: 0, width: width * 0.2 }]}>
-          <Text>Tentative Total Cost</Text>
-          <Text style={{ fontWeight: 'bold' }}>{cost} Cr.</Text>
+        <View style={[styles.plantBodycontainer, { borderRightWidth: 0, width: width * 0.28 }]}>
+          <Text>Tentative Total Cost <Text style={{ fontWeight: 'bold' }}> {cost} Cr.</Text></Text>
         </View>
-      </View>
+      </View>      
     </View>
   );
 };

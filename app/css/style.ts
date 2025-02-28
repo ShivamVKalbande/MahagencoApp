@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         marginBottom: 10,
         backgroundColor:colors.white,
-        margin:20,
+        margin:10,
     },
     item: {
         padding: 15,
@@ -197,7 +197,8 @@ const styles = StyleSheet.create({
     },
     dropdownTitle:{
         flexDirection:'row',
-        padding:20,
+        padding:10,
+        paddingLeft:20,
     },
     dropdownTitleText:{
         color:colors.white,
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
         // height: 100,
         width: width * 0.9,
         backgroundColor: colors.lightGray,
-        elevation: 10,
+        elevation: 5,
         borderRadius: 20,
         margin: 10,
         padding: 10,
@@ -392,7 +393,8 @@ const styles = StyleSheet.create({
     sliderBottomText:{
         fontSize: 14,
         fontWeight:'600',
-        textAlign:'center'
+        textAlign:'center',
+        // color:colors.white,
     },
     smallSliderBottomContainer:{ 
         flexDirection: 'row', 

@@ -109,6 +109,7 @@ const Projects = () => {
           bgColor={colors.yellow}
         />
         {/* Project Card end */}
+        <View style={{marginBottom:20}}></View>
       </View>
       {/* main content end */}
     </ScrollView>

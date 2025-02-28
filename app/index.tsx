@@ -64,7 +64,7 @@ const HomeScreen = () => {
             style={styles.TextInput}
             placeholder="Enter User ID"
             placeholderTextColor={colors.secondary}
-            keyboardType="numeric"
+            keyboardType="number-pad"
             value={email}
             onChangeText={text => {
               setEmail(text);

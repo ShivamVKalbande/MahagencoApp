@@ -28,6 +28,27 @@ export async function financePlant() {
     return data;
 }
 
+export async function fundCenterData(Plants: string) {
+    try {
+        const res = await fetch(`${API_URL}/fundcenter`,
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ Plants }),
+        });
+    const data = await res.json();
+    if (!res.ok) {
+        // console.log(data);
+        throw new Error(`Error fetching data: ${res.status}`);
+    }
+    return data;
+}
+catch (error) {
+    console.error('Error:', error);
+    return {};
+}
+}
+
 export async function fundTableData(Plants: string, fundcenter:string) {
     try {
         const res = await fetch(`${API_URL}/filterfinance`,

@@ -77,7 +77,7 @@ const ProjectDetail = () => {
                 />
                 {/* card end */}
                 {/* Plants header text start */}
-                <View style={styles.plantHeaderContainer}>
+                <View style={[styles.plantHeaderContainer, {marginBottom:10}]}>
                     <Text style={styles.departmentHeading}>{projectName} :</Text>
                 </View>
                 {/* Plants header text End */}
