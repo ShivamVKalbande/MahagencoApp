@@ -1,8 +1,11 @@
 import { colors } from "@/constant/color";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Stack } from "expo-router";
-import { View, Dimensions, StyleSheet } from "react-native";
+import { Link, Stack } from "expo-router";
+import { View, Dimensions, StyleSheet, Pressable } from "react-native";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import LogoutModal from "./components/logoutModal";
+import { useAuth } from "./store/authStore";
 
 const queryClient = new QueryClient();
 const { width, height } = Dimensions.get("window");
@@ -25,20 +28,23 @@ const screens = [
   { name: "screen/projectDetail", title: "Project" },
 ];
 
-function CustomHeader() {
+function CustomHeader({ onLogout }) {
   return (
-    <View style={styles1.background}>
+    <Pressable onPress={onLogout}>
       <MaterialCommunityIcons
-        name="dots-vertical"
-        size={35}
+        name="logout"
+        size={25}
         color={colors.white}
-        style={{ left: width * 0.9 }}
+        style={{ marginRight: 15 }}
       />
-    </View>
+    </Pressable>
   );
 }
 
 export default function RootLayout() {
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+  const isLoggedIn = useAuth((s) => !!s.id);
+  !isLoggedIn &&  <Link href={'screen/home'} />
   return (
     <QueryClientProvider client={queryClient}>
       <Stack>
@@ -52,11 +58,15 @@ export default function RootLayout() {
               headerTitleAlign: "center",
               headerTitleStyle: { color: colors.white },
               headerTintColor: colors.white,
-              headerBackground: showHeader ? CustomHeader : undefined,
+              headerRight: () => <CustomHeader onLogout={() => setLogoutModalVisible(true)} />,
+              headerStyle: { backgroundColor: colors.lightblue },
             }}
           />
         ))}
       </Stack>
+
+      {/* Logout Modal (moved to RootLayout for consistent rendering) */}
+      <LogoutModal modalVisible={logoutModalVisible} setModalVisible={setLogoutModalVisible} />
     </QueryClientProvider>
   );
 }

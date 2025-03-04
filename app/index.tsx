@@ -1,183 +1,194 @@
-import {
-  Image,
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
-} from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { colors } from '../constant/color';
-import { useNavigation } from '@react-navigation/native';
-import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
+import { Image, SafeAreaView, ScrollView, StatusBar, Text, View, Dimensions, Pressable } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import styles from './css/style'
+import { colors } from '@/constant/color';
 import image from '@/constant/image';
-import { useMutation } from '@tanstack/react-query';
-import { login } from './api/login';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { Link, useRouter } from 'expo-router';
+import Card from './components/Card';
+import LogoutModal from './components/logoutModal';
+import { useAuth } from './store/authStore';
 
-const HomeScreen = () => {
-  const navigation = useNavigation();
-  const [secureEntry, setSecureEntry] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+const { width } = Dimensions.get('window');
+const size = width * 0.25; // Size of the circle
 
-  const postLoginMutation = useMutation({
-    mutationFn: () => login(email.trim(), password.trim()),
-    onSuccess: (data) => {
-      if (data) {
-        const success = data.success;
-        const actualOtp = data.otp;
-        if (success) {
-        // navigation.navigate('screen/otp', { actualOtp: actualOtp });
-        navigation.navigate('screen/home');
-        } else {
-          setErrorMessage('Invalid User ID or Password');
+
+const Home = () => {
+
+    const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+    const isLoggedIn = useAuth((s) => !!s.id);
+    const router = useRouter();
+    useEffect(() => {
+        if (!isLoggedIn) {
+            setTimeout(() => {
+                router.replace('/screen/home'); 
+            }, 100); // Small delay to ensure RootLayout is mounted
         }
-      } else {
-        setErrorMessage('Invalid User ID or Password');
-      }
-    },
-  });
+    }, [isLoggedIn]);
 
-  const handleLogin = () => {
-    postLoginMutation.mutate();
-  };
+    if (!isLoggedIn) return null;
+    return (
+        <SafeAreaView style={styles.container}>
+            <StatusBar backgroundColor={colors.lightblue} barStyle="dark-content" />
+            <View
+                style={styles.Scrollcontainer}
+            >
+                {/* Header Container */}
+                <View style={styles.headerContainer}>
+                    <Image
+                        source={image.Whitelogo}
+                        style={styles.logo}
+                    />
+                    <Pressable onPress={() =>setLogoutModalVisible(true)}>
+                        <MaterialCommunityIcons
+                            // name={'dots-vertical'}
+                            name={'logout'}
+                            size={30}
+                            color={colors.white}
+                            style={styles.menu}
+                        />
+                    </Pressable>
+                </View>
+                {/* Main Container */}
+                <View style={styles.mainBg}>
+                    {/* Logout Modal (moved to RootLayout for consistent rendering) */}
+      <LogoutModal modalVisible={logoutModalVisible} setModalVisible={setLogoutModalVisible} />
+                    {/* horizontal Slider start */}
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 25, }}>
+                        {/* Card 1 */}
+                        <Card
+                            title="Year 2023"
+                            subTitle="Mahagenco Target"
+                            value="200 Unit"
+                            progress={0.6}
+                            current="150"
+                            unit="Unit"
+                            aboveText="Current"
+                            belowText="Generation"
+                            meter="Gain/Loss"
+                            secondTitle=""
+                            innerStroke={colors.red}
+                        />
+                        {/* Card 2 */}
+                        <Card
+                            title="Year 2023"
+                            subTitle="Budget Allocate"
+                            value="23,43,41,41,140.82 Rs"
+                            progress={0.6}
+                            current="8,01,51,40,795"
+                            unit="Rs"
+                            aboveText="Budget"
+                            belowText="Consumed"
+                            meter=""
+                            secondTitle="Budget Allocate"
+                            innerStroke={colors.red}
+                        />
+                    </ScrollView>
+                    {/* horizontal Slider End */}
+                    {/* Department Card Start */}
+                    <View style={styles.departmentContainer}>
+                        <Text style={styles.departmentHeading}>Departments</Text>
+                        {/* department row start */}
+                        <View style={styles.departmentRow}>
+                            {/* box 1 */}
+                            <Link href={'screen/operations'} asChild>
+                                <Pressable style={styles.departmentBox}>
+                                    <Image
+                                        source={image.operation}
+                                        style={styles.iconImage}
+                                    />
+                                    <Text>
+                                        OPERATIONS
+                                    </Text>
+                                </Pressable>
+                            </Link>
+                            {/* box 2 */}
+                            <Link href={'screen/material'} asChild>
+                                <Pressable style={styles.departmentBox}>
+                                    <Image
+                                        source={image.material}
+                                        style={styles.iconImage}
+                                    />
+                                    <Text>
+                                        MATERIAL
+                                    </Text>
+                                </Pressable>
+                            </Link>
 
-  // const date = Date();
-  // console.log("current date",date);
+                            {/* box 3 */}
+                            <Link href={'screen/finance'} asChild>
+                                <Pressable style={styles.departmentBox3}>
+                                    <Image
+                                        source={image.finance}
+                                        style={styles.iconImage}
+                                    />
+                                    <Text>FINANCE</Text>
+                                </Pressable>
+                            </Link>
+                        </View>
+                        {/* department row end */}
+                        {/* department row start */}
+                        <View style={styles.departmentRow}>
+                            {/* box 1 */}
+                            <Link href={'screen/projects'} asChild>
+                                <Pressable style={styles.departmentBox}>
+                                    <Image
+                                        source={image.projects}
+                                        style={styles.iconImage}
+                                    />
+                                    <Text>
+                                        PROJECTS
+                                    </Text>
+                                </Pressable>
+                            </Link>
+                            {/* box 2 */}
+                            <Link href={'screen/fuel'} asChild>
+                                <Pressable style={styles.departmentBox}>
+                                    <Image
+                                        source={image.fuel}
+                                        style={styles.iconImage}
+                                    />
+                                    <Text>
+                                        FUEL/COAL
+                                    </Text>
+                                </Pressable>
+                            </Link>
+                            {/* box 3 */}
+                            <Link href={'screen/bunker'} asChild>
+                                <Pressable style={styles.departmentBox3}>
+                                    <Image
+                                        source={image.bunker}
+                                        style={styles.iconImage}
+                                    />
+                                    <Text>
+                                        BUNKER COAL
+                                    </Text>
+                                </Pressable>
+                            </Link>
+                        </View>
+                        {/* department row end */}
+                        {/* department row start */}
+                        <View style={styles.departmentRow}>
+                            {/* box 1 */}
+                            <Link href={'screen/hr'} asChild>
+                                <Pressable style={styles.departmentBox}>
+                                    <Image
+                                        source={image.hr}
+                                        style={styles.iconImage}
+                                    />
+                                    <Text>
+                                        HR DEPT
+                                    </Text>
+                                </Pressable>
+                            </Link>
+                        </View>
+                        {/* department row end */}
+                    </View>
+                    {/* Department Card End */}
+                </View>
+            </View>
+        </SafeAreaView>
+    )
+}
 
-  // const [sample, setsample] = useState(2008-09-22 15:24:13.790);
-
-  return (
-    <SafeAreaView  style={styles.container}>   
-    <StatusBar barStyle="dark-content" />
-      <View style={styles.formContainer}>
-      <Image
-        source={image.logo}
-        style={styles.bannerImage}
-      />
-        <View style={styles.inputContainer}>
-          <SimpleLineIcons name={'user'} size={25} color={colors.secondary} />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Enter User ID"
-            placeholderTextColor={colors.secondary}
-            keyboardType="number-pad"
-            value={email}
-            onChangeText={text => {
-              setEmail(text);
-              // console.log('Email:', text); // Log the email input
-            }}
-          />
-          {/* <Text>{ finalDate }</Text> */}
-        </View>
-        <View style={styles.inputContainer}>
-          <SimpleLineIcons name={'lock'} size={29} color={colors.secondary} />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Enter your password"
-            placeholderTextColor={colors.secondary}
-            secureTextEntry={secureEntry}
-            value={password}
-            onChangeText={text => {
-              setPassword(text);
-              // console.log('Password:', text); // Log the password input
-            }}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              setSecureEntry(prev => !prev);
-            }}>
-            <Ionicons
-              name={secureEntry ? 'eye-off' : 'eye'}
-              size={20}
-              color={colors.secondary}
-            />
-          </TouchableOpacity>
-        </View>
-        {errorMessage ? (
-          <Text style={styles.errorText}>{errorMessage}</Text>
-        ) : null}
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[
-              styles.loginButtonWrapper,
-              { backgroundColor: colors.skyblue },
-            ]}
-            onPress={handleLogin}>
-            <Text style={styles.loginButtonText}>Login</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity>
-          <Text style={styles.forgetPasswordText}>Forget User ID/Password?</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
-};
-
-export default HomeScreen;
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bannerImage: {
-    height: 90,
-    width: 150,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    marginTop: 20,
-    width: '80%',
-    height: 60,
-    borderRadius: 100,
-  },
-  loginButtonWrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    borderRadius: 98,
-    borderColor: colors.white,
-  },
-  loginButtonText: {
-    color: colors.white,
-    fontSize: 18,
-  },
-  formContainer: {
-    marginTop: 20,
-    borderWidth:1,
-    borderColor: colors.skyblue,
-    alignItems:'center',
-    width:'80%',
-    padding:10,
-    borderRadius:10,
-  },
-  inputContainer: {
-    borderWidth: 1,
-    borderColor: colors.secondary,
-    borderRadius: 100,
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 2,
-    marginVertical: 10,
-  },
-  TextInput: {
-    flex: 1,
-    paddingHorizontal: 10,
-  },
-  forgetPasswordText: {
-    textAlign: 'right',
-    color: colors.primary,
-    marginVertical: 10,
-  },
-  errorText: {
-    color: 'red',
-  },
-});
+export default Home

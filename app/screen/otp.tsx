@@ -23,7 +23,7 @@ import {
   
     const handleLogin = () => {
         if(actualOtp == otp){
-            navigation.navigate('screen/home');
+          navigation.navigate('index');
         } else {
             setErrorMessage('Invalid OTP');
         }

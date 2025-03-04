@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
         left: 10,
     },
     menu: {
-        left: width * 0.6,
-        top: height * 0.02,
+        left: width * 0.58,
+        top: height * 0.035,
     },
     mainBg: {
         backgroundColor: colors.white,
@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         margin:10,
-        width:width*0.25
+        width:width*0.28
       },
       TextInput: {
         flex: 1,
@@ -436,6 +436,26 @@ const styles = StyleSheet.create({
       },
       combinationContainer:{
         margin:10
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+      centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
       },
 });
 

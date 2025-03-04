@@ -1,12 +1,12 @@
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
-export async function login(name: string, password:string) {
+export async function login(name: string, password:string, status: string) {
     try {
         const res = await fetch(`${API_URL}/login`,
         {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, password}),
+            body: JSON.stringify({ name, password, status}),
         });
     const data = await res.json();
     if (!res.ok) {

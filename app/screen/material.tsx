@@ -24,12 +24,12 @@ const Material = () => {
   const [release, setRelease]= useState(0);
   const [complete, setComplete]= useState(0);
   const [count, setCount] = useState(0);
-  const [total, setTotal] = useState("0");
+  const [total, setTotal] = useState("");
   const [prActive, setPrActive]= useState(0);
   const [prRelease, setPrRelease]= useState(0);
   const [prComplete, setPrComplete]= useState(0);
   const [prCount, setPrCount] = useState(0);
-  const [prTotal, setPrTotal] = useState("0");
+  const [prTotal, setPrTotal] = useState("");
  
   const getPlatMutation = useMutation({
     mutationFn: () => getPlant(),
