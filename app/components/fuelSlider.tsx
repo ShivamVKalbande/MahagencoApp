@@ -22,15 +22,15 @@ const FuelSlider = ({energyName, sliderValue, setSliderValue }) => {
                 <Slider
                   style={styles.FuelSlider}
                   value={sliderValue}
-                  onValueChange={handleValueChange} // No re-render on every small change
-                  onSlidingComplete={handleSlidingComplete} // Updates state only when user releases
+                  onValueChange={handleValueChange}
+                  onSlidingComplete={handleSlidingComplete}
                   minimumValue={0}
                   maximumValue={100}
                   minimumTrackTintColor={colors.skyblue}
                   maximumTrackTintColor={colors.gray}
                   thumbTintColor={colors.skyblue}
                 />
-                <Text style={{ fontWeight: 'bold' }} >{sliderValue}</Text>
+                <Text style={{ fontWeight: 'bold' }} >{sliderValue.toFixed(2)}</Text>
               </View>
               {/* Labels below the slider */}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between',  width: width*0.72, left:15}}>

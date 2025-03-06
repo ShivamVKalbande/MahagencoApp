@@ -33,6 +33,7 @@ const Operations = () => {
   const [shrValue, setShrValue] = useState<number>(0);
   const [cvValue, setCvValue] = useState<number>(0);
   const [tlValue, setTlValue] = useState<number>(0);
+
   const [totalGeneration, setTotalGeneration] = useState(0);
   const [loadability, setLoadability] = useState(0);
   const [plf, setPlf] = useState(0);
@@ -60,9 +61,10 @@ const Operations = () => {
   const [AVF_target, setAVF_target] = useState(0);
   const [avfValue, setAvfValue] = useState<number>(0);
   useEffect(() => {
-    setAvfValue(AVF_current);
-  }, [AVF_current]);
-
+    setAvfValue(AVF_current); 
+  },[AVF_current])
+  
+  
   const getPlatMutation = useMutation({
     mutationFn: () => getPlant(),
     onSuccess: (data) => {
@@ -105,6 +107,7 @@ const Operations = () => {
       getUnitMutation.mutate(); // Fetch units when plant changes
     }
   }, [selectedItem?.value]);
+
 
   const operationMutation = useMutation({
     mutationFn: () => postOperation(level, selectedItemTime?.value, selectedItem?.value, selectedTariff?.value, selectedUnit?.value),
@@ -153,6 +156,19 @@ const Operations = () => {
       operationMutation.mutate();
     }
    },[selectedUnit]);
+
+     // gain/loss handle according to the simulation 
+  useEffect(() => {
+      setAVF_gain_loss(avfValue - AVF_target); 
+  }, [AVF_current, AVF_target, avfValue]);
+    useEffect(() => {
+      setSOC_gain_loss(socValue - SOC_target); 
+  }, [SOC_current, SOC_target, socValue]);
+  useEffect(() => {
+    setAPC_gain_loss(apcValue - APC_target); 
+}, [APC_current, APC_target, apcValue]);
+  
+  
   return (
     <ScrollView 
     showsVerticalScrollIndicator={false}
@@ -247,7 +263,7 @@ const Operations = () => {
             {/* belove text start */}
             <View style={styles.aboveContainer}>
               <View style={styles.aboveTextContainer}>
-                <Text style={{ fontSize: 12 }}>Gain/Loss {AVF_gain_loss}</Text>
+                <Text style={{ fontSize: 12 }}>Gain/Loss {AVF_gain_loss.toFixed(2)}</Text>
               </View>
               <SliderBar
                 sliderValue={avfValue} setSliderValue={setAvfValue}
@@ -271,7 +287,7 @@ const Operations = () => {
             {/* belove text start */}
             <View style={styles.aboveContainer}>
               <View style={styles.aboveTextContainer}>
-                <Text style={{ fontSize: 12 }}>Gain/Loss {SOC_gain_loss}</Text>
+                <Text style={{ fontSize: 12 }}>Gain/Loss {SOC_gain_loss.toFixed(2)}</Text>
               </View>
               <SliderBar
                 sliderValue={socValue} setSliderValue={setSocValue}
@@ -295,7 +311,7 @@ const Operations = () => {
             {/* belove text start */}
             <View style={styles.aboveContainer}>
               <View style={styles.aboveTextContainer}>
-                <Text style={{ fontSize: 12 }}>Gain/Loss {APC_gain_loss}</Text>
+                <Text style={{ fontSize: 12 }}>Gain/Loss {APC_gain_loss.toFixed(2)}</Text>
               </View>
               <SliderBar
                 sliderValue={apcValue} setSliderValue={setApcValue}

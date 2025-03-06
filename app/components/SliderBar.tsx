@@ -24,8 +24,8 @@ const SliderBar = ({ sliderValue, setSliderValue }) => {
             <Slider
                 style={styles.slider}
                 value={sliderValue}
-                onValueChange={handleValueChange} // No re-render on every small change
-                onSlidingComplete={handleSlidingComplete} // Updates state only when user releases
+                onValueChange={handleValueChange} 
+                onSlidingComplete={handleSlidingComplete} 
                 minimumValue={0}
                 maximumValue={100}
                 minimumTrackTintColor={colors.skyblue}
