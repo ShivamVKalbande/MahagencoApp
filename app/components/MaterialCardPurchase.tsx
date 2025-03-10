@@ -7,7 +7,18 @@ import { useNavigation } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
-const MaterialCardPurchase = ({ title, value, circle1, current, unit, purchase, circle2, circle3 }) => {
+interface CardProp {
+  title: string;
+  value: number; 
+  circle1: number; 
+  current: number;
+  unit: string;
+  purchase: string;
+  circle2: number;
+  circle3: number;
+}
+
+const MaterialCardPurchase: React.FC<CardProp> = ({ title, value, circle1, current, unit, purchase, circle2, circle3 }) => {
   const size = width * 0.28; // Size of the circle
   const strokeWidth = 20; // Thickness of the stroke
   const radius = (size - strokeWidth) / 2;
@@ -22,7 +33,7 @@ const MaterialCardPurchase = ({ title, value, circle1, current, unit, purchase, 
   const redRotation = greenRotation + (360 * (circle1 / value));
   const blueRotation = redRotation + (360 * (circle2 / value));
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const materialNavigation = () => {
     if(purchase === "Order"){
       navigation.navigate('screen/materialPo')

@@ -5,7 +5,21 @@ import { colors } from '@/constant/color';
 import styles from '../css/style'
 
 const { width } = Dimensions.get('window');
-const ScreenCard = ({ title, subTitle, value, progress, current, circleHeading, unit, meter, secondTitle, innerStroke }) => {
+
+interface CardProp {
+  title: string;
+  subTitle: string;
+  value: string;
+  progress: number;
+  current: number;
+  meter: string;
+  secondTitle: string;
+  innerStroke: string;
+  unit:string;
+  circleHeading: string;
+}
+
+const ScreenCard: React.FC<CardProp> = ({ title, subTitle, value, progress, current, circleHeading, unit, meter, secondTitle, innerStroke }) => {
   const size = width*0.3; // Size of the circle
   const strokeWidth = 5; // Thickness of the stroke
   const radius = (size - strokeWidth) / 2;

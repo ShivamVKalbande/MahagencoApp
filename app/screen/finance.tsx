@@ -10,13 +10,13 @@ import { financeCard, financePlant } from '../api/finance';
 import FinanceCard from '../components/financeCard';
 
 const Finance = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const [result, setResult] = useState(""); 
   const [budget, setBudget] = useState("");
   const [consumable, setConsumable] = useState("");              
   const [available, setAvailable] = useState("");              
-  const [plant, setPlant] = useState([{ label: "MAHAGENCO", value: "" }]);
-  const [selectedItem, setSelectedItem] = useState(plant[0]);
+  const [plant, setPlant] = useState<{ label: string; value: string }[]>([{ label: "MAHAGENCO", value: "" }]);
+  const [selectedItem, setSelectedItem] = useState<{ label: string; value: string }>(plant[0]);
   const duration = [
     { label: "Year", value: "year" },
     { label: "Month", value: "month" },
@@ -24,7 +24,7 @@ const Finance = () => {
   ]
   const [selectedItemTime, setSelectedItemTime] = useState(duration[0]);
 
-  const [plantData, setPlantData] = useState([]);
+  const [plantData, setPlantData] = useState<{ name: string; totalConsumableBudget: number; totalConsumedBudget: number; totalAvailableAmount: number }[]>([]);
 
   // get card details 
   const getFinanceCardMutation = useMutation({
@@ -65,7 +65,7 @@ const Finance = () => {
         <View style={styles.mainDropeDown}>
           <Dropdown
             name="Mahagenco"
-            data={Array.isArray(plant) ? plant : []}  // Ensure it's an array
+            data={Array.isArray(plant) ? plant : []}
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
           />
@@ -101,7 +101,6 @@ const Finance = () => {
         {/* plants cards start */}
         {
           plantData.map((item, index) => (
-
             <View
               key={index}
               style={styles.plantCardContainer}>

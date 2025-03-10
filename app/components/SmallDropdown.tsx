@@ -5,7 +5,15 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import styles from '../css/style';
 
 const { height, width } = Dimensions.get('window');
-const SmallDropdown = ({ name, data, selectedItem, setSelectedItem }) => {
+
+interface DropdownProps {
+  name: string;
+  data: { label: string; value: any }[];
+  selectedItem: { label: string; value: any };
+  setSelectedItem: (item: { label: string; value: any }) => void;
+}
+
+const SmallDropdown: React.FC<DropdownProps> = ({ name, data, selectedItem, setSelectedItem }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 

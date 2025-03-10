@@ -4,15 +4,20 @@ import styles from '../css/style';
 import { colors } from '@/constant/color';
 import Slider from '@react-native-community/slider';
 
-const SliderBar = ({ sliderValue, setSliderValue }) => {
+interface SliderBarProp {
+    sliderValue: number;
+    setSliderValue:(value: number) => void;
+}
+
+const SliderBar: React.FC<SliderBarProp> = ({ sliderValue, setSliderValue }) => {
 
     const sliderRef = useRef(sliderValue);
 
-    const handleValueChange = useCallback((value) => {
+    const handleValueChange = useCallback((value: number) => {
         sliderRef.current = value; // Store the live value
     }, []);
 
-    const handleSlidingComplete = useCallback((value) => {
+    const handleSlidingComplete = useCallback((value: number) => {
         setSliderValue(value); // Update state only when user stops dragging
     }, []);
 

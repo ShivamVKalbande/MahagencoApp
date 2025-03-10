@@ -3,10 +3,17 @@ import { View, Text, TouchableOpacity, TextInput, FlatList, Dimensions } from 'r
 import Modal from 'react-native-modal';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import styles from '../css/style';
-import { colors } from '@/constant/color';
 
 const { height, width } = Dimensions.get('window');
-const HrDropdown = ({ name, data, selectedItem, setSelectedItem }) => {
+
+interface hrProp {
+  name: string;
+  data:{label: string; value: any}[];
+  selectedItem: string;
+  setSelectedItem: (item: {label: string; value: any}) => void;
+}
+
+const HrDropdown: React.FC<hrProp> = ({ name, data, selectedItem, setSelectedItem }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 

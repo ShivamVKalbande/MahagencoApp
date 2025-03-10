@@ -2,7 +2,6 @@ import { View, Text, ScrollView, Dimensions, FlatList, ActivityIndicator } from 
 import React, { useEffect, useMemo, useState } from 'react'
 import Dropdown from '../components/Dropdown'
 import styles from '../css/style';
-import ScreenCard from '../components/ScreenCard';
 import { colors } from '@/constant/color';
 import SmallDropdown from '../components/SmallDropdown';
 import { useMutation } from '@tanstack/react-query';
@@ -12,16 +11,14 @@ import FinanceCard from '../components/financeCard';
 
 const { width, height } = Dimensions.get('window');
 const Bunker = () => {
-  const [plant, setPlant] = useState([{ label: "BTPS", value: "btps" }]);
+  const [plant, setPlant] = useState<{ label: string; value: string }[]>([{ label: "BTPS", value: "btps" }]);
   const duration = useMemo(() => [
     { label: "Year", value: "year" },
     { label: "Month", value: "month" },
     { label: "Day", value: "day" },
   ], []);
-  const [selectedItem, setSelectedItem] = useState(plant[0]);
-  const [selectedItemTime, setSelectedItemTime] = useState(duration[0]);
-  const [totalGeneration, setTotalGeneration] = useState(901776516540);
-  const [totalGainLoss, setTotalGainLoss] = useState(1031314674980);
+  const [selectedItem, setSelectedItem] = useState<{ label: string; value: string }>(plant[0]);
+  const [selectedItemTime, setSelectedItemTime] = useState<{ label: string; value: string }>(duration[0]);
 
   const month = [
     { label: "January", value: "jan" },
@@ -41,7 +38,7 @@ const Bunker = () => {
 
   const [unit, setUnit] = useState([{ label: "UNIT03", value: "UNIT03" }]);
   const [selectedItemUnit, setSelectedItemUnit] = useState(unit[0]);
-  const [bunkarTable, setBunkarTable] = useState([]);
+  const [bunkarTable, setBunkarTable] = useState<{ Period: string; CoalConsumption: string; AFB_CV: string }[]>([]);
   const [totalAFBCV, setTotalAFBCV] = useState("");
   const [totalCoalConsumption, setTotalCoalConsumption] = useState("");
   const [avgAFBCV, setAvgAFBCV] = useState("");
@@ -112,7 +109,10 @@ const Bunker = () => {
       const tableData = data.data;
 
       // Calculate average AFB CV
-      const afbValues = tableData.map((item) => parseFloat(item.AFB_CV) || 0);
+      const afbValues = tableData.map((item) => {
+        const num = parseFloat(item.AFB_CV);
+        return Number.isNaN(num) ? 0 : num;
+      });
       const totalAFB = afbValues.reduce((sum, value) => sum + value, 0);
       const avgAFB = afbValues.length > 0 ? totalAFB / afbValues.length : 0;
 
@@ -208,6 +208,7 @@ const Bunker = () => {
             <FlatList
               data={bunkarTable}
               keyExtractor={(item, index) => index.toString()}
+              scrollEnabled= {false}
               renderItem={({ item }) => (
                 <View style={styles.tableData}>
                   <View style={{ width: width * 0.3 }}>
@@ -236,7 +237,7 @@ const Bunker = () => {
           {/* Table Data end */}
         </View>
         {/* Table End */}
-        <View style={{ height: height * 0.3, backgroundColor: colors.white }}></View>
+        <View style={{ height: height*0.32, backgroundColor: colors.white }}></View>
       </View>
       {/* main content end */}
     </View>

@@ -433,9 +433,22 @@ const styles = StyleSheet.create({
       TextInput: {
         flex: 1,
         paddingHorizontal: 10,
+       
       },
       combinationContainer:{
-        margin:10
+        margin:10,
+        // padding:5,
+        elevation:2,
+        backgroundColor:colors.white,
+        borderTopRightRadius:10,
+        borderTopLeftRadius:10,
+        borderRightWidth:0.2,
+        borderLeftWidth:0.2,
+        borderBottomWidth:0.2,
+        borderColor:colors.gray,
+        
+
+      
       },
       modalView: {
         margin: 20,

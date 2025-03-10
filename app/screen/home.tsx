@@ -18,7 +18,7 @@ import { login } from '../api/login';
 import { useAuth } from '../store/authStore';
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const [secureEntry, setSecureEntry] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

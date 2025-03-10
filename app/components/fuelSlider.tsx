@@ -5,14 +5,19 @@ import { colors } from '@/constant/color'
 import styles from '../css/style';
 
 const { width } = Dimensions.get('window');
-const FuelSlider = ({energyName, sliderValue, setSliderValue }) => {
+interface FuelSliderProp {
+  energyName: string;
+  sliderValue: number;
+  setSliderValue: (value: number) => void;
+}
+const FuelSlider: React.FC<FuelSliderProp> = ({energyName, sliderValue, setSliderValue }) => {
      const sliderRef = useRef(sliderValue);
 
-  const handleValueChange = useCallback((value) => {
+  const handleValueChange = useCallback((value: number) => {
     sliderRef.current = value; // Store the live value
   }, []);
 
-  const handleSlidingComplete = useCallback((value) => {
+  const handleSlidingComplete = useCallback((value: number) => {
     setSliderValue(value); // Update state only when user stops dragging
   }, []);
   return (
@@ -30,7 +35,7 @@ const FuelSlider = ({energyName, sliderValue, setSliderValue }) => {
                   maximumTrackTintColor={colors.gray}
                   thumbTintColor={colors.skyblue}
                 />
-                <Text style={{ fontWeight: 'bold' }} >{sliderValue.toFixed(2)}</Text>
+                <Text style={{ fontWeight: 'bold', width: width*0.14, }} >{sliderValue.toFixed(2)}</Text>
               </View>
               {/* Labels below the slider */}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between',  width: width*0.72, left:15}}>

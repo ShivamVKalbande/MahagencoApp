@@ -4,7 +4,21 @@ import Svg, { Circle } from 'react-native-svg';
 import { colors } from '@/constant/color';
 import styles from '../css/style'
 
-const Card = ({ title, subTitle, value, progress, current, meter, secondTitle, innerStroke, belowText, aboveText, unit }) => {
+interface CardProp {
+  title: string;
+  subTitle: string;
+  value: string;
+  progress: number;
+  current: string;
+  meter: string;
+  secondTitle: string;
+  innerStroke: string;
+  belowText: string;
+  aboveText: string;
+  unit:string;
+}
+
+const Card: React.FC<CardProp> = ({ title, subTitle, value, progress, current, meter, secondTitle, innerStroke, belowText, aboveText, unit }) => {
   const size = 100; // Size of the circle
   const strokeWidth = 5; // Thickness of the stroke
   const radius = (size - strokeWidth) / 2;

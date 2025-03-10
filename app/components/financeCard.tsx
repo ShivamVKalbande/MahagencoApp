@@ -5,7 +5,22 @@ import { colors } from '@/constant/color';
 import styles from '../css/style'
 
 const { width } = Dimensions.get('window');
-const FinanceCard = ({ title, subTitle, value, progress, circleValue, current, circleHeading, unit, meter, secondTitle, innerStroke }) => {
+
+interface CardProp {
+  title: string;
+  subTitle: string;
+  value: string;
+  progress: number;
+  current: string;
+  circleHeading: string;
+  meter: string;
+  secondTitle: string;
+  innerStroke: string;
+  unit:string;
+  circleValue:string;
+}
+
+const FinanceCard: React.FC<CardProp> = ({ title, subTitle, value, progress, circleValue, current, circleHeading, unit, meter, secondTitle, innerStroke }) => {
   const size = width*0.3; // Size of the circle
   const strokeWidth = 5; // Thickness of the stroke
   const radius = (size - strokeWidth) / 2;

@@ -14,6 +14,7 @@ const FuelCombination = () => {
     const [combinationButton, setCombinationButton] = useState(false);
     const [combination, setCombination] = useState([]);
     const [error, setError] = useState('');
+    const [suggestion, setSuggestion] = useState('');
 
 
     // Get table data 
@@ -23,10 +24,18 @@ const FuelCombination = () => {
             if (data.bestCombinations && Array.isArray(data.bestCombinations)) {
                 setCombination(data.bestCombinations);
                 setError(''); // Clear any previous errors
+                setSuggestion('');
             } 
-        },
-        onError: (error) => {
-            setError(error?.message || "An unexpected error occurred.");
+            if(data.suggestion){
+                setSuggestion(data.suggestion);
+                setError('');
+                setCombination([]);
+            }
+            if(data.error){
+                setError(data.error);
+                setCombination([]);
+                setSuggestion('');
+            }
         }
     });
 
@@ -89,13 +98,14 @@ const FuelCombination = () => {
                 <View style={styles.tableContainer}>
                     {postTableMutation.isPending ? (
                         <ActivityIndicator size="large" color={colors.primary} style={{ marginVertical: 20 }} />
-                    ) : combination.length === 0 ? (
-                        <Text style={{ textAlign: 'center', padding: 10 }}>No Combination Data Available</Text>
                     ) : error ? (
                         <Text style={{ textAlign: 'center', padding: 10 }}>{error}</Text>
+                    ) : suggestion ? (
+                        <Text style={{ textAlign: 'center', padding: 10 }}>{suggestion}</Text>
                     ) : (
                         <FlatList
                             data={combination}
+                            showsVerticalScrollIndicator={false}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => (
                                 <View style={styles.combinationContainer}>
@@ -127,15 +137,25 @@ const FuelCombination = () => {
                                             </View>
                                         )}
                                     />
-                                    <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ 
+                                        flexDirection: 'row', 
+                                        paddingHorizontal:5, 
+                                        paddingBottom:5 }}>
                                         <Text>Total Quantity : </Text>
-                                        <Text style={{ color: colors.skyblue }}>{item.TotalQuantity}</Text>
+                                        <Text style={{ color: colors.skyblue }}>{item.TotalQuantity.toFixed(2)}</Text>
                                     </View>
-                                    <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ flexDirection: 'row', 
+                                        paddingHorizontal:5, 
+                                        paddingBottom:5 
+                                        }}>
                                         <Text >Weighted Avg Rate : </Text>
                                         <Text style={{ color: colors.skyblue }}>{item.WeightedAverageRate}</Text>
                                     </View>
-                                    <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ 
+                                        flexDirection: 'row', 
+                                        paddingHorizontal:5, 
+                                        paddingBottom:5 
+                                        }}>
                                         <Text>Weighted Avg GCV : </Text>
                                         <Text style={{ color: colors.skyblue }}>{item.WeightedAverageGCV}</Text>
                                     </View>

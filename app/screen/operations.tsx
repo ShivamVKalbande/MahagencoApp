@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ScrollView, Text, TextInput, View } from 'react-native';
 import styles from '../css/style'
 import Dropdown from '../components/Dropdown';
 import { colors } from '@/constant/color';
@@ -37,7 +37,7 @@ const Operations = () => {
   const [totalGeneration, setTotalGeneration] = useState(0);
   const [loadability, setLoadability] = useState(0);
   const [plf, setPlf] = useState(0);
-  const [totalGainLoss, setTotalGainLoss] = useState(0);
+  const [totalGainLoss, setTotalGainLoss] = useState<number>(0);
 
   const [APC_gain_loss, setAPC_gain_loss] = useState(0);
   const [APC_current, setAPC_current] = useState(0);
@@ -61,10 +61,10 @@ const Operations = () => {
   const [AVF_target, setAVF_target] = useState(0);
   const [avfValue, setAvfValue] = useState<number>(0);
   useEffect(() => {
-    setAvfValue(AVF_current); 
-  },[AVF_current])
-  
-  
+    setAvfValue(AVF_current);
+  }, [AVF_current])
+
+
   const getPlatMutation = useMutation({
     mutationFn: () => getPlant(),
     onSuccess: (data) => {
@@ -141,39 +141,53 @@ const Operations = () => {
     operationMutation.mutate();
   }, [level, selectedItemTime?.value, selectedItem?.value, selectedTariff?.value, selectedUnit?.value]);
 
+  // if (operationMutation.isPending) {
+  //       return <ActivityIndicator />;
+  //     }
+
   //for tarrif 
   useEffect(() => {
-    if (selectedTariff.value === "tariff1" || selectedTariff.value === "tariff2") {      
+    if (selectedTariff.value === "tariff1" || selectedTariff.value === "tariff2") {
       // setUnit([{ label: "All Unit", value: "" }]);
       setSelectedUnit({ label: "All Unit", value: "" });
       operationMutation.mutate();
     }
-   }, [selectedTariff]);
+  }, [selectedTariff]);
 
-   useEffect(()=> {
-    if(selectedUnit?.value !==""){
-      setSelectedTariff({label: "Select Tariff", value: ""});
+  useEffect(() => {
+    if (selectedUnit?.value !== "") {
+      setSelectedTariff({ label: "Select Tariff", value: "" });
       operationMutation.mutate();
     }
-   },[selectedUnit]);
+  }, [selectedUnit]);
 
-     // gain/loss handle according to the simulation 
+  // gain/loss handle according to the simulation 
   useEffect(() => {
-      setAVF_gain_loss(avfValue - AVF_target); 
+    setAVF_gain_loss(avfValue - AVF_target);
   }, [AVF_current, AVF_target, avfValue]);
-    useEffect(() => {
-      setSOC_gain_loss(socValue - SOC_target); 
+  useEffect(() => {
+    setSOC_gain_loss( SOC_target - socValue);
   }, [SOC_current, SOC_target, socValue]);
   useEffect(() => {
-    setAPC_gain_loss(apcValue - APC_target); 
-}, [APC_current, APC_target, apcValue]);
-  
-  
+    setAPC_gain_loss( APC_target - apcValue);
+  }, [APC_current, APC_target, apcValue]);
+
+  //main card gain loss 
+  useEffect(() => {
+    const mainCardGainLoss =
+      (Number(APC_gain_loss) || 0) +
+      (Number(SOC_gain_loss) || 0) +
+      (Number(AVF_gain_loss) || 0);
+      const formattedValue = mainCardGainLoss.toFixed(2);
+    setTotalGainLoss(formattedValue);
+  }, [APC_gain_loss, SOC_gain_loss, AVF_gain_loss]);
+
   return (
-    <ScrollView 
-    showsVerticalScrollIndicator={false}
-    style={styles.container}>
-      {/* <View style={styles.containerBg}></View> */}
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={styles.container}>
+     
+        {/* <View style={styles.containerBg}></View> */ }
       {/* main container start */}
       <View style={styles.mainContainer}>
         {/* dropdown start */}
@@ -196,7 +210,7 @@ const Operations = () => {
         <ScreenCard
           title="Year 2024-25"
           subTitle="Mahagenco Target"
-          value={totalGeneration}
+          value={totalGeneration.toString()}
           progress={0.6}
           current={totalGainLoss}
           circleHeading="Current Generation"
@@ -222,26 +236,26 @@ const Operations = () => {
           <View style={styles.sliderContainer}>
             {/* above Text start */}
             <View style={styles.aboveContainer}>
-              <View style={[styles.aboveTextContainer, { width:width*0.3,}]}>
+              <View style={[styles.aboveTextContainer, { width: width * 0.3, }]}>
                 <Text style={{ color: colors.skyblue }}>Gen</Text>
               </View>
-              <View style={[styles.aboveTextContainer, { width:width*0.3,}]}>
+              <View style={[styles.aboveTextContainer, { width: width * 0.3, }]}>
                 <Text style={{ color: colors.skyblue }}>PLF</Text>
               </View>
-              <View style={[styles.aboveTextContainer, { width:width*0.3, alignItems:'flex-end'}]}>
+              <View style={[styles.aboveTextContainer, { width: width * 0.3, alignItems: 'flex-end' }]}>
                 <Text style={{ color: colors.skyblue }}>Loadability</Text>
               </View>
             </View>
             {/* above Text end */}
             {/* belove text start */}
             <View style={styles.aboveContainer}>
-              <View style={[styles.aboveTextContainer, { width:width*0.3,}]}>
+              <View style={[styles.aboveTextContainer, { width: width * 0.3, }]}>
                 <Text style={{ fontSize: 12 }}>Total: {totalGeneration}</Text>
               </View>
-              <View style={[styles.aboveTextContainer, { width:width*0.3,}]}>
+              <View style={[styles.aboveTextContainer, { width: width * 0.3, }]}>
                 <Text style={{ fontSize: 12 }}>Total: {plf}</Text>
               </View>
-              <View style={[styles.aboveTextContainer, { width:width*0.3, alignItems:'flex-end'}]}>
+              <View style={[styles.aboveTextContainer, { width: width * 0.3, alignItems: 'flex-end' }]}>
                 <Text style={{ fontSize: 12 }}>Total: {loadability}</Text>
               </View>
             </View>
@@ -264,6 +278,15 @@ const Operations = () => {
             <View style={styles.aboveContainer}>
               <View style={styles.aboveTextContainer}>
                 <Text style={{ fontSize: 12 }}>Gain/Loss {AVF_gain_loss.toFixed(2)}</Text>
+                <View style={[styles.inputContainer, { width:width*0.16,  margin:5,}]}>
+                        <TextInput
+                            style={[styles.TextInput, {paddingHorizontal: 0,  textAlign:'center',}]}
+                            placeholderTextColor={colors.secondary}
+                            keyboardType="numeric"
+                            value={avfValue.toString()}
+                            onChangeText={text => setAvfValue(Number(text) || 0)}
+                        />
+                    </View>
               </View>
               <SliderBar
                 sliderValue={avfValue} setSliderValue={setAvfValue}

@@ -7,9 +7,14 @@ import { useNavigation } from 'expo-router';
 
 const { width } = Dimensions.get("window");
 
-const LogoutModal = ({ modalVisible, setModalVisible }) => {
+interface logoutProp {
+  modalVisible: boolean;
+  setModalVisible: (param: boolean) => void;
+}
+
+const LogoutModal:React.FC<logoutProp> = ({ modalVisible, setModalVisible }) => {
   const logout = useAuth((state) => state.logout);
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   return (
     <Modal

@@ -12,7 +12,7 @@ import { getFuel } from '../api/fuel';
 
 const { width } = Dimensions.get('window');
 const Fuel = () => {
-   const navigation = useNavigation();
+  const navigation = useNavigation();
   const [plant, setPlant] = useState([{ label: "BTPS", value: "btps" }]);
   const duration = useMemo(() => [
     { label: "Year", value: "year" },
@@ -36,10 +36,10 @@ const Fuel = () => {
     gross: 0,
     apc: 0,
     apcPercent: 0,
-    netGeneration:0,
+    netGeneration: 0,
     soc: 0,
-    socKwh:0,
-    coalFactor:0,
+    socKwh: 0,
+    coalFactor: 0,
     domestic: 0,
     wash: 0,
     import: 0,
@@ -56,15 +56,15 @@ const Fuel = () => {
     ldoKl: 0,
     foKl: 0,
     other: 0,
-    heatRateKcal:0,
-    ldoHeatContentMKcal:0,
-    foHeatContentMKCal:0,
-    coalMKCal:0,
-    TotalMKCal:0,
-    coalMt:0,
-    totalCost:0,
-    genCost:0,
-    energyKwh:0,
+    heatRateKcal: 0,
+    ldoHeatContentMKcal: 0,
+    foHeatContentMKCal: 0,
+    coalMKCal: 0,
+    TotalMKCal: 0,
+    coalMt: 0,
+    totalCost: 0,
+    genCost: 0,
+    energyKwh: 0,
   });
   //get plant data from api
   const getPlatMutation = useMutation({
@@ -113,71 +113,74 @@ const Fuel = () => {
 
   //get fuel data from api
   const operationMutation = useMutation({
-      mutationFn: () => getFuel(selectedItem?.value, selectedUnit?.value, selectedTariff?.value),
-      onSuccess: (data) => {
-        if (!data) {
-          console.error("API response is null or undefined");
-          return;
-        }
-        setSliderValues(prev => ({ ...prev, gross: data.Gross_Generation_MU }));
-        setSliderValues(prev => ({ ...prev, apc: data.APC_MU}));
-        setSliderValues(prev => ( {  ...prev, apcPercent: data.Apc_Percent} ));
-        setSliderValues(prev => ( {  ...prev, netGeneration: data.Net_Generation_MU} ));
-        setSliderValues(prev => ( {  ...prev, soc: data.SOC_KL} ));
-        setSliderValues(prev => ( {  ...prev, socKwh: data.SOC_ml_Kwh} ));
-        setSliderValues(prev => ( {  ...prev, coalFactor: data.Coal_Factor_Kg_Kwh} ));
-        setSliderValues(prev => ( {  ...prev, domestic: data.Domestic_Rs_MT} ));
-        setSliderValues(prev => ( {  ...prev, wash: data.Wash_Coal_Rs_MT} ));
-        setSliderValues(prev => ( {  ...prev, import: data.Import_Rs_MT} ));
-        setSliderValues(prev => ( {  ...prev, ldo: data.LDO_Rs_KL} ));
-        setSliderValues(prev => ( {  ...prev, fo: data.FO_Rs_KL} ));
-        setSliderValues(prev => ( {  ...prev, domesticKcal: data.Domestic_Kcal_Kg} ));
-        setSliderValues(prev => ( {  ...prev, washKcal: data.Wash_Coal_Kcal_Kg} ));
-        setSliderValues(prev => ( {  ...prev, importKcal: data.Imported_Coal_CV} ));
-        setSliderValues(prev => ( {  ...prev, ldoKcal: data.LDO_Kcal_Kg} ));
-        setSliderValues(prev => ( {  ...prev, foKcal: data.FO_Kcal_Kg} ));
-        setSliderValues(prev => ( {  ...prev, domesticMt: data.Domestic_MT} ));
-        setSliderValues(prev => ( {  ...prev, washMt: data.Wash_Coal_MT} ));
-        setSliderValues(prev => ( {  ...prev, importMt: data.Import_MT} ));
-        setSliderValues(prev => ( {  ...prev, ldoKl: data.LDO_KL} ));
-        setSliderValues(prev => ( {  ...prev, foKl: data.FO_KL} ));
-        setSliderValues(prev => ( {  ...prev, heatRateKcal: data.Heat_Rate_Kcal_Kwh} ));
-        setSliderValues(prev => ( {  ...prev, ldoHeatContentMKcal: data.LDO_Heat_Content_MKCal} ));
-        setSliderValues(prev => ( {  ...prev, foHeatContentMKCal: data.FO_Heat_Content_MKCal} ));
-        setSliderValues(prev => ( {  ...prev, coalMKCal: data.Coal_Heat_Content_MKCal} ));
-        setSliderValues(prev => ( {  ...prev, TotalMKCal: data.Total_Heat_Content_MKCal} ));
-        setSliderValues(prev => ( {  ...prev, coalMt: data.Coal_Consumption_MT} ));
-        setSliderValues(prev => ( {  ...prev, totalCost: data.Total_Fuel_Cost_Rs_Crore} ));
-        setSliderValues(prev => ( {  ...prev, genCost: data.GenCostat_Gen_Terminal_Rs} ));
-        setSliderValues(prev => ( {  ...prev, other: data.Other_Charges_Adjustment_Rs} ));
-        setSliderValues(prev => ( {  ...prev, energyKwh: data.Energy_Charges_Rs_Kwh} ));
-      },
-      onError: (error) => {
-        console.error("Error: ", error);
-      },
-    });
-  
-    useEffect(() => {
-      operationMutation.mutate();
-    }, [ selectedItem?.value, selectedTariff?.value, selectedUnit?.value]);
+    mutationFn: () => getFuel(selectedItem?.value, selectedUnit?.value, selectedTariff?.value),
+    onSuccess: (data) => {
+      if (!data) {
+        console.error("API response is null or undefined");
+        return;
+      }
+      setSliderValues(prev => ({ ...prev, gross: data.Gross_Generation_MU }));
+      setSliderValues(prev => ({ ...prev, apc: data.APC_MU }));
+      setSliderValues(prev => ({ ...prev, apcPercent: data.Apc_Percent }));
+      setSliderValues(prev => ({ ...prev, netGeneration: data.Net_Generation_MU }));
+      setSliderValues(prev => ({ ...prev, soc: data.SOC_KL }));
+      setSliderValues(prev => ({ ...prev, socKwh: data.SOC_ml_Kwh }));
+      setSliderValues(prev => ({ ...prev, coalFactor: data.Coal_Factor_Kg_Kwh }));
+      setSliderValues(prev => ({ ...prev, domestic: data.Domestic_Rs_MT }));
+      setSliderValues(prev => ({ ...prev, wash: data.Wash_Coal_Rs_MT }));
+      setSliderValues(prev => ({ ...prev, import: data.Import_Rs_MT }));
+      setSliderValues(prev => ({ ...prev, ldo: data.LDO_Rs_KL }));
+      setSliderValues(prev => ({ ...prev, fo: data.FO_Rs_KL }));
+      setSliderValues(prev => ({ ...prev, domesticKcal: data.Domestic_Kcal_Kg }));
+      setSliderValues(prev => ({ ...prev, washKcal: data.Wash_Coal_Kcal_Kg }));
+      setSliderValues(prev => ({ ...prev, importKcal: data.Imported_Coal_CV }));
+      setSliderValues(prev => ({ ...prev, ldoKcal: data.LDO_Kcal_Kg }));
+      setSliderValues(prev => ({ ...prev, foKcal: data.FO_Kcal_Kg }));
+      setSliderValues(prev => ({ ...prev, domesticMt: data.Domestic_MT }));
+      setSliderValues(prev => ({ ...prev, washMt: data.Wash_Coal_MT }));
+      setSliderValues(prev => ({ ...prev, importMt: data.Import_MT }));
+      setSliderValues(prev => ({ ...prev, ldoKl: data.LDO_KL }));
+      setSliderValues(prev => ({ ...prev, foKl: data.FO_KL }));
+      setSliderValues(prev => ({ ...prev, heatRateKcal: data.Heat_Rate_Kcal_Kwh }));
+      setSliderValues(prev => ({ ...prev, ldoHeatContentMKcal: data.LDO_Heat_Content_MKCal }));
+      setSliderValues(prev => ({ ...prev, foHeatContentMKCal: data.FO_Heat_Content_MKCal }));
+      setSliderValues(prev => ({ ...prev, coalMKCal: data.Coal_Heat_Content_MKCal }));
+      setSliderValues(prev => ({ ...prev, TotalMKCal: data.Total_Heat_Content_MKCal }));
+      setSliderValues(prev => ({ ...prev, coalMt: data.Coal_Consumption_MT }));
+      setSliderValues(prev => ({ ...prev, totalCost: data.Total_Fuel_Cost_Rs_Crore }));
+      setSliderValues(prev => ({ ...prev, genCost: data.GenCostat_Gen_Terminal_Rs }));
+      setSliderValues(prev => ({ ...prev, other: data.Other_Charges_Adjustment_Rs }));
+      setSliderValues(prev => ({ ...prev, energyKwh: data.Energy_Charges_Rs_Kwh }));
+    },
+    onError: (error) => {
+      console.error("Error: ", error);
+    },
+  });
 
-//for tarrif 
   useEffect(() => {
-    if (selectedTariff.value === "tariff1" || selectedTariff.value === "tariff2") {      
+    operationMutation.mutate();
+  }, [selectedItem?.value, selectedTariff?.value, selectedUnit?.value]);
+
+  //for tarrif 
+  useEffect(() => {
+    if (selectedTariff.value === "tariff1" || selectedTariff.value === "tariff2") {
       // setUnit([{ label: "All Unit", value: "" }]);
       setSelectedUnit({ label: "All Unit", value: "" });
       // operationMutation.mutate();
     }
-   }, [selectedTariff]);
+  }, [selectedTariff]);
 
-   useEffect(()=> {
-    if(selectedUnit?.value !==""){
-      setSelectedTariff({label: "Select Tariff", value: ""});
+  useEffect(() => {
+    if (selectedUnit?.value !== "") {
+      setSelectedTariff({ label: "Select Tariff", value: "" });
       // operationMutation.mutate();
     }
-   },[selectedUnit]);
+  }, [selectedUnit]);
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+    showsVerticalScrollIndicator={false}
+    style={styles.container}
+    >
       {/* main content start */}
       <View style={styles.mainContainer}>
         {/* dropdown start */}
@@ -215,10 +218,10 @@ const Fuel = () => {
           <Text>Year 2025</Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ fontWeight: 'bold' }}>Enery Charges:</Text>
-            <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>0.00 Rs./Kwh</Text>
+            <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>{sliderValues.energyKwh.toFixed(2)} Rs./Kwh</Text>
             <TouchableOpacity
-               onPress={() => navigation.navigate("screen/fuelCombination")}
-              style={[styles.plantButton, { left: width*0.15,  paddingHorizontal:15}]}
+              onPress={() => navigation.navigate("screen/fuelCombination" as never)}
+              style={[styles.plantButton, { left: width * 0.15, paddingHorizontal: 15 }]}
             >
               <Text style={[
                 styles.smallLabel,
@@ -230,16 +233,18 @@ const Fuel = () => {
         </View>
         {/* heading end */}
         {/* slider Start */}
-        <FuelSlider
-          energyName="Gross Generation MU"
-          sliderValue={sliderValues.gross}
-          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, gross: newValue }))}
-        />
-        <FuelSlider
-          energyName="APC MU"
-          sliderValue={sliderValues.apc}
-          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, apc: newValue }))}
-        />
+        <View style={{width:width*0.85,}}>
+          <FuelSlider
+            energyName="Gross Generation MU"
+            sliderValue={sliderValues.gross}
+            setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, gross: newValue }))}
+          />
+          <FuelSlider
+            energyName="APC MU"
+            sliderValue={sliderValues.apc}
+            setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, apc: newValue }))}
+          />
+        </View>
         {/* slider Buttom Container start */}
 
         <View style={styles.sliderBottomContainer}>
@@ -254,7 +259,7 @@ const Fuel = () => {
         </View>
 
         {/* slider Buttom Container End */}
-
+        <View style={{width:width*0.85,}}>
         <FuelSlider
           energyName="SOC KL"
           sliderValue={sliderValues.soc}
@@ -263,6 +268,7 @@ const Fuel = () => {
         <View style={styles.smallSliderBottomContainer}>
           <Text style={styles.sliderBottomText}>SOC ml/Kwh</Text>
           <Text style={styles.sliderBottomText}>{sliderValues.socKwh}</Text>
+        </View>
         </View>
         {/* slider Buttom Container start */}
         <View style={styles.sliderBottomContainer}>
@@ -279,6 +285,7 @@ const Fuel = () => {
           <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Land Coal Price</Text>
         </View>
         {/* blue text end */}
+        <View style={{width:width*0.85,}}>
         <FuelSlider
           energyName="Domestic Rs/MT"
           sliderValue={sliderValues.domestic}
@@ -294,6 +301,7 @@ const Fuel = () => {
           sliderValue={sliderValues.import}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, import: newValue }))}
         />
+        
         {/* blue text start */}
         <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
           <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Land Oil Price</Text>
@@ -384,6 +392,7 @@ const Fuel = () => {
           sliderValue={sliderValues.other}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, other: newValue }))}
         />
+        </View>
         {/* blue text start */}
         <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
           <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Heat Content MKCal</Text>

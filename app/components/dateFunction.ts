@@ -1,4 +1,7 @@
-const dateFunction = (dateString) => {
+interface dateProp {
+    dateString: string;
+}
+const dateFunction = ({dateString}: dateProp) => {
     if (!dateString) return "Invalid Date";
 
     // console.log("Date format previous:", dateString);

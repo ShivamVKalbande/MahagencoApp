@@ -6,8 +6,16 @@ import { useNavigation } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
-const ProjectsCard = ({projectNumber, projectName, capacity, cost, bgColor }) => {
-    const navigation = useNavigation();
+interface projectProp {
+  projectNumber: string;
+  projectName: string;
+  capacity: string;
+  cost: number;
+  bgColor: string;
+}
+
+const ProjectsCard: React.FC<projectProp> = ({projectNumber, projectName, capacity, cost, bgColor }) => {
+    const navigation = useNavigation<any>();
     const projectNavigation = ()=>{
         navigation.navigate('screen/projectDetail',{ projectNumber: projectNumber, projectName: projectName });
     }
