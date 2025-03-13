@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Dimensions, ScrollView, Text, TextInput, View } from 'react-native';
+import { Dimensions, ScrollView, Text, View } from 'react-native';
 import styles from '../css/style'
 import Dropdown from '../components/Dropdown';
 import { colors } from '@/constant/color';
 import SliderBar from '../components/SliderBar';
 import ScreenCard from '../components/ScreenCard';
-import { getPlant, getUnit, postOperation } from '../api/operation'
+import { getPlant, getUnit, postOperation, postSimulation } from '../api/operation'
 import { useMutation } from "@tanstack/react-query";
+import CustomSimulation from '../components/customSimulation';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const Operations = () => {
   const [level, setLevel] = useState("mahagenco");
   const [plant, setPlant] = useState([{ label: "MAHAGENCO", value: "" }]);
-  // const [duration, setDuration] = useState([{ label: "Year", value: "year" }]);
   const duration = [
     { label: "Year", value: "year" },
     { label: "Month", value: "month" },
     { label: "Day", value: "day" },
   ]
-  // const [tariff, setTariff] = useState([{ label: "Tariff 1", value: "tariff1" }]);
   const tariff = [
     { label: "select Tariff", value: "" },
     { label: "Tariff 1", value: "tariff1" },
@@ -63,6 +62,9 @@ const Operations = () => {
   useEffect(() => {
     setAvfValue(AVF_current);
   }, [AVF_current])
+
+  const [source, setSource] = useState('');
+  const [current, setCurrent] = useState(0);
 
 
   const getPlatMutation = useMutation({
@@ -141,10 +143,6 @@ const Operations = () => {
     operationMutation.mutate();
   }, [level, selectedItemTime?.value, selectedItem?.value, selectedTariff?.value, selectedUnit?.value]);
 
-  // if (operationMutation.isPending) {
-  //       return <ActivityIndicator />;
-  //     }
-
   //for tarrif 
   useEffect(() => {
     if (selectedTariff.value === "tariff1" || selectedTariff.value === "tariff2") {
@@ -162,32 +160,54 @@ const Operations = () => {
   }, [selectedUnit]);
 
   // gain/loss handle according to the simulation 
-  useEffect(() => {
-    setAVF_gain_loss(avfValue - AVF_target);
-  }, [AVF_current, AVF_target, avfValue]);
-  useEffect(() => {
-    setSOC_gain_loss( SOC_target - socValue);
-  }, [SOC_current, SOC_target, socValue]);
-  useEffect(() => {
-    setAPC_gain_loss( APC_target - apcValue);
-  }, [APC_current, APC_target, apcValue]);
 
-  //main card gain loss 
-  useEffect(() => {
-    const mainCardGainLoss =
-      (Number(APC_gain_loss) || 0) +
-      (Number(SOC_gain_loss) || 0) +
-      (Number(AVF_gain_loss) || 0);
-      const formattedValue = mainCardGainLoss.toFixed(2);
-    setTotalGainLoss(formattedValue);
-  }, [APC_gain_loss, SOC_gain_loss, AVF_gain_loss]);
+const simulationMutation = useMutation({
+  mutationFn: () =>
+    postSimulation(
+      selectedItemTime?.value,
+      selectedItem?.value,
+      selectedTariff?.value,
+      selectedUnit?.value,
+      source,
+      current
+    ),
+  onSuccess: (data) => {
+    if (!data) {
+      console.error("API response is null or undefined");
+      return;
+    }
+    setTotalGainLoss(parseFloat(data.TotalGeration_Gain_loss));
+    
+    if (source === 'avf') setAVF_gain_loss(parseFloat(data.individual_Gain_loss));
+    if (source === 'soc') setSOC_gain_loss(parseFloat(data.individual_Gain_loss));
+    if (source === 'apc') setAPC_gain_loss(parseFloat(data.individual_Gain_loss));
+  },
+  onError: (error) => {
+    console.error("Error: ", error);
+  },
+});
+
+useEffect(() => {
+  if (avfValue !== AVF_current) {
+    setSource('avf');
+    setCurrent(avfValue);
+    simulationMutation.mutate();
+  } else if (socValue !== SOC_current) {
+    setSource('soc');
+    setCurrent(socValue);
+    simulationMutation.mutate();
+  } else if (apcValue !== APC_current) {
+    setSource('apc');
+    setCurrent(apcValue);
+    simulationMutation.mutate();
+  }
+}, [avfValue, socValue, apcValue]);
+
 
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={styles.container}>
-     
-        {/* <View style={styles.containerBg}></View> */ }
       {/* main container start */}
       <View style={styles.mainContainer}>
         {/* dropdown start */}
@@ -210,7 +230,7 @@ const Operations = () => {
         <ScreenCard
           title="Year 2024-25"
           subTitle="Mahagenco Target"
-          value={totalGeneration.toString()}
+          value={totalGeneration.toFixed(2)}
           progress={0.6}
           current={totalGainLoss}
           circleHeading="Current Generation"
@@ -250,7 +270,7 @@ const Operations = () => {
             {/* belove text start */}
             <View style={styles.aboveContainer}>
               <View style={[styles.aboveTextContainer, { width: width * 0.3, }]}>
-                <Text style={{ fontSize: 12 }}>Total: {totalGeneration}</Text>
+                <Text style={{ fontSize: 12 }}>Total: {totalGeneration.toFixed(2)}</Text>
               </View>
               <View style={[styles.aboveTextContainer, { width: width * 0.3, }]}>
                 <Text style={{ fontSize: 12 }}>Total: {plf}</Text>
@@ -278,20 +298,19 @@ const Operations = () => {
             <View style={styles.aboveContainer}>
               <View style={styles.aboveTextContainer}>
                 <Text style={{ fontSize: 12 }}>Gain/Loss {AVF_gain_loss.toFixed(2)}</Text>
-                <View style={[styles.inputContainer, { width:width*0.16,  margin:5,}]}>
-                        <TextInput
-                            style={[styles.TextInput, {paddingHorizontal: 0,  textAlign:'center',}]}
-                            placeholderTextColor={colors.secondary}
-                            keyboardType="numeric"
-                            value={avfValue.toString()}
-                            onChangeText={text => setAvfValue(Number(text) || 0)}
-                        />
-                    </View>
               </View>
-              <SliderBar
-                sliderValue={avfValue} setSliderValue={setAvfValue}
+              <View style={{ width: width * 0.16, }}>
+                <SliderBar
+                  sliderValue={avfValue} setSliderValue={setAvfValue}
+                />
+              </View>
+              <CustomSimulation
+                name='AVF'
+                value={avfValue}
+                setValue={setAvfValue}
               />
             </View>
+
             {/* belove text end */}
           </View>
           {/* slider 2 end */}
@@ -312,8 +331,15 @@ const Operations = () => {
               <View style={styles.aboveTextContainer}>
                 <Text style={{ fontSize: 12 }}>Gain/Loss {SOC_gain_loss.toFixed(2)}</Text>
               </View>
-              <SliderBar
-                sliderValue={socValue} setSliderValue={setSocValue}
+              <View style={{ width: width * 0.16, }}>
+                <SliderBar
+                  sliderValue={socValue} setSliderValue={setSocValue}
+                />
+              </View>
+              <CustomSimulation
+                name='SOC'
+                value={socValue}
+                setValue={setSocValue}
               />
             </View>
             {/* belove text end */}
@@ -336,8 +362,15 @@ const Operations = () => {
               <View style={styles.aboveTextContainer}>
                 <Text style={{ fontSize: 12 }}>Gain/Loss {APC_gain_loss.toFixed(2)}</Text>
               </View>
-              <SliderBar
-                sliderValue={apcValue} setSliderValue={setApcValue}
+              <View style={{ width: width * 0.16, }}>
+                <SliderBar
+                  sliderValue={apcValue} setSliderValue={setApcValue}
+                />
+              </View>
+              <CustomSimulation
+                name='APC'
+                value={apcValue}
+                setValue={setApcValue}
               />
             </View>
             {/* belove text end */}
@@ -360,8 +393,15 @@ const Operations = () => {
               <View style={styles.aboveTextContainer}>
                 <Text style={{ fontSize: 12 }}>Gain/Loss 225</Text>
               </View>
-              <SliderBar
-                sliderValue={shrValue} setSliderValue={setShrValue}
+              <View style={{ width: width * 0.16, }}>
+                <SliderBar
+                  sliderValue={shrValue} setSliderValue={setShrValue}
+                />
+              </View>
+              <CustomSimulation
+                name='SHR'
+                value={shrValue}
+                setValue={setShrValue}
               />
             </View>
             {/* belove text end */}
@@ -384,8 +424,15 @@ const Operations = () => {
               <View style={styles.aboveTextContainer}>
                 <Text style={{ fontSize: 12 }}>Gain/Loss 225</Text>
               </View>
-              <SliderBar
-                sliderValue={cvValue} setSliderValue={setCvValue}
+              <View style={{ width: width * 0.16, }}>
+                <SliderBar
+                  sliderValue={cvValue} setSliderValue={setCvValue}
+                />
+              </View>
+              <CustomSimulation
+                name='CV-Commercial'
+                value={cvValue}
+                setValue={setCvValue}
               />
             </View>
             {/* belove text end */}
@@ -408,8 +455,15 @@ const Operations = () => {
               <View style={styles.aboveTextContainer}>
                 <Text style={{ fontSize: 12 }}>Gain/Loss 225</Text>
               </View>
-              <SliderBar
-                sliderValue={tlValue} setSliderValue={setTlValue}
+              <View style={{ width: width * 0.16, }}>
+                <SliderBar
+                  sliderValue={tlValue} setSliderValue={setTlValue}
+                />
+              </View>
+              <CustomSimulation
+                name='TL'
+                value={tlValue}
+                setValue={setTlValue}
               />
             </View>
             {/* belove text end */}
@@ -422,5 +476,4 @@ const Operations = () => {
     </ScrollView>
   );
 };
-
 export default Operations;

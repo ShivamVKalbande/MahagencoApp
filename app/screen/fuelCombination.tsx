@@ -4,13 +4,23 @@ import styles from '../css/style'
 import { colors } from '@/constant/color'
 import { useMutation } from '@tanstack/react-query'
 import { fuelCombination } from '../api/fuel'
+import { useRoute } from '@react-navigation/native'
+import { useNavigation } from 'expo-router'
+
 
 const { width } = Dimensions.get('window');
 
 const FuelCombination = () => {
-    const [domestic, setDomestic] = useState('');
-    const [rate, setRate] = useState('');
-    const [gcv, setGcv] = useState('');
+    const navigation = useNavigation<any>();
+    const route = useRoute();
+    const { coalQuantity = '', coalRate = '', coalGcv = '' } = route.params || {};
+    // console.log('coal qauntity ', coalQuantity, coalRate, coalGcv);
+    const [domestic, setDomestic] = useState(coalQuantity);
+    const [rate, setRate] = useState(coalRate);
+    const [gcv, setGcv] = useState(coalGcv);
+
+
+
     const [combinationButton, setCombinationButton] = useState(false);
     const [combination, setCombination] = useState([]);
     const [error, setError] = useState('');
@@ -23,21 +33,27 @@ const FuelCombination = () => {
         onSuccess: (data) => {
             if (data.bestCombinations && Array.isArray(data.bestCombinations)) {
                 setCombination(data.bestCombinations);
-                setError(''); // Clear any previous errors
+                setError('');
                 setSuggestion('');
-            } 
-            if(data.suggestion){
-                setSuggestion(data.suggestion);
+            }
+            if (data.message) {
+                setSuggestion(data.message);
                 setError('');
                 setCombination([]);
             }
-            if(data.error){
+            if (data.error) {
                 setError(data.error);
                 setCombination([]);
                 setSuggestion('');
             }
         }
     });
+
+    useEffect(() => {
+        setDomestic(coalQuantity.toString());
+        setRate(coalRate.toString());
+        setGcv(coalGcv.toString());
+    }, [coalQuantity, coalRate, coalGcv]);
 
     useEffect(() => {
         if (combinationButton) {
@@ -105,6 +121,8 @@ const FuelCombination = () => {
                     ) : (
                         <FlatList
                             data={combination}
+                            initialNumToRender={5}
+                            windowSize={10}
                             showsVerticalScrollIndicator={false}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => (
@@ -137,27 +155,37 @@ const FuelCombination = () => {
                                             </View>
                                         )}
                                     />
-                                    <View style={{ 
-                                        flexDirection: 'row', 
-                                        paddingHorizontal:5, 
-                                        paddingBottom:5 }}>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        paddingHorizontal: 5,
+                                        paddingBottom: 5
+                                    }}>
                                         <Text>Total Quantity : </Text>
                                         <Text style={{ color: colors.skyblue }}>{item.TotalQuantity.toFixed(2)}</Text>
                                     </View>
-                                    <View style={{ flexDirection: 'row', 
-                                        paddingHorizontal:5, 
-                                        paddingBottom:5 
-                                        }}>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        paddingHorizontal: 5,
+                                        paddingBottom: 5
+                                    }}>
                                         <Text >Weighted Avg Rate : </Text>
                                         <Text style={{ color: colors.skyblue }}>{item.WeightedAverageRate}</Text>
                                     </View>
-                                    <View style={{ 
-                                        flexDirection: 'row', 
-                                        paddingHorizontal:5, 
-                                        paddingBottom:5 
-                                        }}>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        paddingHorizontal: 5,
+                                        paddingBottom: 5
+                                    }}>
                                         <Text>Weighted Avg GCV : </Text>
                                         <Text style={{ color: colors.skyblue }}>{item.WeightedAverageGCV}</Text>
+                                        {/* Button Start */}
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate("screen/fuel", {bestQuantity: item.TotalQuantity, bestRate: item.WeightedAverageRate, bestGCV: item.WeightedAverageGCV})}
+                                            style={[styles.plantButton, { paddingHorizontal: 15, left:width*0.3, top:-20, }]}
+                                        >
+                                            <Text style={[styles.smallLabel, { color: colors.white }]}>Ok</Text>
+                                        </TouchableOpacity>
+                                        {/* Button End */}
                                     </View>
                                 </View>
                             )}

@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
         height: 50,
     },
     slider:{
-        width: width*0.65,
+        width: width*0.55,
         height: 20,
     },
     fuelSliderBox:{
@@ -256,11 +256,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         // marginTop: 8,
         paddingHorizontal: 12,
-        width: width*0.75,
+        width: width*0.64,
         top:-10,
       },
     label: {
-        width: width*0.1083,
+        width: width*0.0916,
         color: colors.black,
         fontSize: 12,
       },
@@ -470,6 +470,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
       },
+
+    //   pencil styling 
+    pencilContainer:{
+        width: width * 0.1, 
+        left: width * 0.4, 
+        marginHorizontal: 5,
+    },
 });
 
 export default styles;

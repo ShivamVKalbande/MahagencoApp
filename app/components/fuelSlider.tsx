@@ -8,9 +8,11 @@ const { width } = Dimensions.get('window');
 interface FuelSliderProp {
   energyName: string;
   sliderValue: number;
+  minimumValue: number;
+  maximumValue: number;
   setSliderValue: (value: number) => void;
 }
-const FuelSlider: React.FC<FuelSliderProp> = ({energyName, sliderValue, setSliderValue }) => {
+const FuelSlider: React.FC<FuelSliderProp> = ({energyName, sliderValue, setSliderValue, maximumValue, minimumValue }) => {
      const sliderRef = useRef(sliderValue);
 
   const handleValueChange = useCallback((value: number) => {
@@ -29,8 +31,8 @@ const FuelSlider: React.FC<FuelSliderProp> = ({energyName, sliderValue, setSlide
                   value={sliderValue}
                   onValueChange={handleValueChange}
                   onSlidingComplete={handleSlidingComplete}
-                  minimumValue={0}
-                  maximumValue={100}
+                  minimumValue={minimumValue}
+                  maximumValue={maximumValue}
                   minimumTrackTintColor={colors.skyblue}
                   maximumTrackTintColor={colors.gray}
                   thumbTintColor={colors.skyblue}
@@ -41,11 +43,11 @@ const FuelSlider: React.FC<FuelSliderProp> = ({energyName, sliderValue, setSlide
               <View style={{ flexDirection: 'row', justifyContent: 'space-between',  width: width*0.72, left:15}}>
                 <View>
                   <Text >|</Text>
-                  <Text >0</Text>
+                  <Text >{minimumValue}</Text>
                 </View>
                 <View>
                   <Text style={{textAlign:'right'}}>|</Text>
-                  <Text >100</Text>
+                  <Text >{maximumValue}</Text>
                 </View>
               </View>
             </View>

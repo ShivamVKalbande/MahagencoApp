@@ -3,16 +3,24 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Dropdown from '../components/Dropdown'
 import { colors } from '@/constant/color';
 import styles from '../css/style';
-import Slider from '@react-native-community/slider';
 import FuelSlider from '../components/fuelSlider';
 import { useNavigation } from 'expo-router';
 import { useMutation } from '@tanstack/react-query';
 import { getPlant, getUnit } from '../api/operation';
 import { getFuel } from '../api/fuel';
+import { useRoute } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const Fuel = () => {
-  const navigation = useNavigation();
+
+  const route = useRoute();
+      const { bestQuantity:initialBestQuantity = '', bestRate: initialBestRate = '', bestGCV:initialBestGCV = '' } = route.params || {};
+
+      const [bestRate, setBestRate] = useState(initialBestRate || '');
+      const [bestQuantity, setBestQuantity] = useState(initialBestQuantity || '');
+      const [bestGCV, setBestGCV] = useState(initialBestGCV || '');
+
+  const navigation = useNavigation<any>();
   const [plant, setPlant] = useState([{ label: "BTPS", value: "btps" }]);
   const duration = useMemo(() => [
     { label: "Year", value: "year" },
@@ -34,28 +42,66 @@ const Fuel = () => {
   // slider data start
   const [sliderValues, setSliderValues] = useState({
     gross: 0,
+    minGross:0,
+    maxGross:100,
     apc: 0,
+    minApc:0,
+    maxApc:100,
     apcPercent: 0,
     netGeneration: 0,
     soc: 0,
+    minSoc:0,
+    maxSoc:100,
     socKwh: 0,
     coalFactor: 0,
     domestic: 0,
+    minDomestic:0,
+    maxDomestic:100,
     wash: 0,
+    minWash:0,
+    maxWash:100,
     import: 0,
+    minImport:0,
+    maxImport:100,
     ldo: 0,
+    minLdo:0,
+    maxLdo:100,
     fo: 0,
+    minFo:0,
+    maxFo:100,
     domesticKcal: 0,
+    minDomesticKcal:0,
+    maxDomesticKcal:100,
     washKcal: 0,
+    minWashKcal:0,
+    maxWashKcal:100,
     importKcal: 0,
+    minImportKcal:0,
+    maxImportKcal:100,
     ldoKcal: 0,
+    minLdoKcal:0,
+    maxLdoKcal:100,
     foKcal: 0,
+    minFoKcal:0,
+    maxFoKcal:100,
     domesticMt: 0,
+    minDomesticMt:0,
+    maxDomesticMt:100,
     washMt: 0,
+    minWashMt:0,
+    maxWashMt:100,
     importMt: 0,
+    minImportMt:0,
+    maxImportMt:100,
     ldoKl: 0,
+    minLdoKl:0,
+    maxLdoKl:100,
     foKl: 0,
+    minFoKl:0,
+    maxFoKl:100,
     other: 0,
+    minOther:0,
+    maxOther:100,
     heatRateKcal: 0,
     ldoHeatContentMKcal: 0,
     foHeatContentMKCal: 0,
@@ -120,27 +166,83 @@ const Fuel = () => {
         return;
       }
       setSliderValues(prev => ({ ...prev, gross: data.Gross_Generation_MU }));
+      setSliderValues(prev => ({ ...prev, maxGross: data.Gross_Generation_MU*2 }));
+      setSliderValues(prev => ({ ...prev, minGross: data.Gross_Generation_MU/2 }));
+
       setSliderValues(prev => ({ ...prev, apc: data.APC_MU }));
+      setSliderValues(prev => ({ ...prev, maxApc: data.APC_MU*2 }));
+      setSliderValues(prev => ({ ...prev, minApc: data.APC_MU/2 }));
+
       setSliderValues(prev => ({ ...prev, apcPercent: data.Apc_Percent }));
       setSliderValues(prev => ({ ...prev, netGeneration: data.Net_Generation_MU }));
+
       setSliderValues(prev => ({ ...prev, soc: data.SOC_KL }));
+      setSliderValues(prev => ({ ...prev, maxSoc: data.SOC_KL*2 }));
+      setSliderValues(prev => ({ ...prev, minSoc: data.SOC_KL/2 }));
+
       setSliderValues(prev => ({ ...prev, socKwh: data.SOC_ml_Kwh }));
       setSliderValues(prev => ({ ...prev, coalFactor: data.Coal_Factor_Kg_Kwh }));
+
       setSliderValues(prev => ({ ...prev, domestic: data.Domestic_Rs_MT }));
+      setSliderValues(prev => ({ ...prev, maxDomestic: data.Domestic_Rs_MT*2 }));
+      setSliderValues(prev => ({ ...prev, minDomestic: data.Domestic_Rs_MT/2 }));
+
       setSliderValues(prev => ({ ...prev, wash: data.Wash_Coal_Rs_MT }));
+      setSliderValues(prev => ({ ...prev, maxWash: data.Wash_Coal_Rs_MT*2 }));
+      setSliderValues(prev => ({ ...prev, minWash: data.Wash_Coal_Rs_MT/2 }));
+
       setSliderValues(prev => ({ ...prev, import: data.Import_Rs_MT }));
+      setSliderValues(prev => ({ ...prev, maxImport: data.Import_Rs_MT*2 }));
+      setSliderValues(prev => ({ ...prev, minImport: data.Import_Rs_MT/2 }));
+
       setSliderValues(prev => ({ ...prev, ldo: data.LDO_Rs_KL }));
+      setSliderValues(prev => ({ ...prev, maxLdo: data.LDO_Rs_KL*2 }));
+      setSliderValues(prev => ({ ...prev, minLdo: data.LDO_Rs_KL/2 }));
+
       setSliderValues(prev => ({ ...prev, fo: data.FO_Rs_KL }));
+      setSliderValues(prev => ({ ...prev, maxFo: data.FO_Rs_KL*2 }));
+      setSliderValues(prev => ({ ...prev, minFo: data.FO_Rs_KL/2 }));
+
       setSliderValues(prev => ({ ...prev, domesticKcal: data.Domestic_Kcal_Kg }));
+      setSliderValues(prev => ({ ...prev, maxDomesticKcal: data.Domestic_Kcal_Kg*2 }));
+      setSliderValues(prev => ({ ...prev, minDomesticKcal: data.Domestic_Kcal_Kg/2 }));
+
       setSliderValues(prev => ({ ...prev, washKcal: data.Wash_Coal_Kcal_Kg }));
+      setSliderValues(prev => ({ ...prev, maxWashKcal: data.Wash_Coal_Kcal_Kg*2 }));
+      setSliderValues(prev => ({ ...prev, minWashKcal: data.Wash_Coal_Kcal_Kg/2 }));
+
       setSliderValues(prev => ({ ...prev, importKcal: data.Imported_Coal_CV }));
+      setSliderValues(prev => ({ ...prev, maxImportKcal: data.Imported_Coal_CV*2 }));
+      setSliderValues(prev => ({ ...prev, minImportKcal: data.Imported_Coal_CV/2 }));
+
       setSliderValues(prev => ({ ...prev, ldoKcal: data.LDO_Kcal_Kg }));
+      setSliderValues(prev => ({ ...prev, maxLdoKcal: data.LDO_Kcal_Kg*2 }));
+      setSliderValues(prev => ({ ...prev, minLdoKcal: data.LDO_Kcal_Kg/2 }));
+
       setSliderValues(prev => ({ ...prev, foKcal: data.FO_Kcal_Kg }));
+      setSliderValues(prev => ({ ...prev, maxFoKcal: data.FO_Kcal_Kg*2 }));
+      setSliderValues(prev => ({ ...prev, minFoKcal: data.FO_Kcal_Kg/2 }));
+
       setSliderValues(prev => ({ ...prev, domesticMt: data.Domestic_MT }));
+      setSliderValues(prev => ({ ...prev, maxDomesticMt: data.Domestic_MT*2 }));
+      setSliderValues(prev => ({ ...prev, minDomesticMt: data.Domestic_MT/2 }));
+      
       setSliderValues(prev => ({ ...prev, washMt: data.Wash_Coal_MT }));
+      setSliderValues(prev => ({ ...prev, maxWashMt: data.Wash_Coal_MT*2 }));
+      setSliderValues(prev => ({ ...prev, minWashMt: data.Wash_Coal_MT/2 }));
+
       setSliderValues(prev => ({ ...prev, importMt: data.Import_MT }));
+      setSliderValues(prev => ({ ...prev, maxImportMt: data.Import_MT*2 }));
+      setSliderValues(prev => ({ ...prev, minImportMt: data.Import_MT/2 }));
+
       setSliderValues(prev => ({ ...prev, ldoKl: data.LDO_KL }));
+      setSliderValues(prev => ({ ...prev, maxLdoKl: data.LDO_KL*2 }));
+      setSliderValues(prev => ({ ...prev, minLdoKl: data.LDO_KL/2 }));
+
       setSliderValues(prev => ({ ...prev, foKl: data.FO_KL }));
+      setSliderValues(prev => ({ ...prev, maxFoKl: data.FO_KL*2 }));
+      setSliderValues(prev => ({ ...prev, minFoKl: data.FO_KL/2 }));
+
       setSliderValues(prev => ({ ...prev, heatRateKcal: data.Heat_Rate_Kcal_Kwh }));
       setSliderValues(prev => ({ ...prev, ldoHeatContentMKcal: data.LDO_Heat_Content_MKCal }));
       setSliderValues(prev => ({ ...prev, foHeatContentMKCal: data.FO_Heat_Content_MKCal }));
@@ -150,6 +252,9 @@ const Fuel = () => {
       setSliderValues(prev => ({ ...prev, totalCost: data.Total_Fuel_Cost_Rs_Crore }));
       setSliderValues(prev => ({ ...prev, genCost: data.GenCostat_Gen_Terminal_Rs }));
       setSliderValues(prev => ({ ...prev, other: data.Other_Charges_Adjustment_Rs }));
+      setSliderValues(prev => ({ ...prev, maxOther: data.Other_Charges_Adjustment_Rs*2 }));
+      setSliderValues(prev => ({ ...prev, minOther: data.Other_Charges_Adjustment_Rs/2 }));
+
       setSliderValues(prev => ({ ...prev, energyKwh: data.Energy_Charges_Rs_Kwh }));
     },
     onError: (error) => {
@@ -220,7 +325,7 @@ const Fuel = () => {
             <Text style={{ fontWeight: 'bold' }}>Enery Charges:</Text>
             <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>{sliderValues.energyKwh.toFixed(2)} Rs./Kwh</Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate("screen/fuelCombination" as never)}
+              onPress={() => navigation.navigate("screen/fuelCombination", { coalQuantity: sliderValues.domesticMt, coalRate:sliderValues.domestic, coalGcv:sliderValues.domesticKcal } )}
               style={[styles.plantButton, { left: width * 0.15, paddingHorizontal: 15 }]}
             >
               <Text style={[
@@ -238,11 +343,15 @@ const Fuel = () => {
             energyName="Gross Generation MU"
             sliderValue={sliderValues.gross}
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, gross: newValue }))}
+            maximumValue={sliderValues.maxGross}
+            minimumValue={sliderValues.minGross}
           />
           <FuelSlider
             energyName="APC MU"
             sliderValue={sliderValues.apc}
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, apc: newValue }))}
+            maximumValue={sliderValues.maxApc}
+            minimumValue={sliderValues.minApc}
           />
         </View>
         {/* slider Buttom Container start */}
@@ -264,6 +373,8 @@ const Fuel = () => {
           energyName="SOC KL"
           sliderValue={sliderValues.soc}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, soc: newValue }))}
+          maximumValue={sliderValues.maxSoc}
+          minimumValue={sliderValues.minSoc}
         />
         <View style={styles.smallSliderBottomContainer}>
           <Text style={styles.sliderBottomText}>SOC ml/Kwh</Text>
@@ -288,18 +399,24 @@ const Fuel = () => {
         <View style={{width:width*0.85,}}>
         <FuelSlider
           energyName="Domestic Rs/MT"
-          sliderValue={sliderValues.domestic}
-          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, domestic: newValue }))}
+          sliderValue={bestRate !== "" ? bestRate : sliderValues.domestic}
+          setSliderValue={bestRate !== "" ? setBestRate :(newValue) => setSliderValues(prev => ({ ...prev, domestic: newValue }))}
+          maximumValue={sliderValues.maxDomestic}
+          minimumValue={sliderValues.minDomestic}
         />
         <FuelSlider
           energyName="Wash Coal Rs/MT"
           sliderValue={sliderValues.wash}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, wash: newValue }))}
+          maximumValue={sliderValues.maxWash}
+          minimumValue={sliderValues.minWash}
         />
         <FuelSlider
           energyName="Import Rs/MT"
           sliderValue={sliderValues.import}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, import: newValue }))}
+          maximumValue={sliderValues.maxImport}
+          minimumValue={sliderValues.minImport}
         />
         
         {/* blue text start */}
@@ -311,11 +428,15 @@ const Fuel = () => {
           energyName="LDO Rs/KL"
           sliderValue={sliderValues.ldo}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, ldo: newValue }))}
+          maximumValue={sliderValues.maxLdo}
+          minimumValue={sliderValues.minLdo}
         />
         <FuelSlider
           energyName="FO Rs/KL"
           sliderValue={sliderValues.fo}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, fo: newValue }))}
+          maximumValue={sliderValues.maxFo}
+          minimumValue={sliderValues.minFo}
         />
         {/* blue text start */}
         <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
@@ -324,18 +445,24 @@ const Fuel = () => {
         {/* blue text end */}
         <FuelSlider
           energyName="Domestic Kcal/Kg"
-          sliderValue={sliderValues.domesticKcal}
-          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, domesticKcal: newValue }))}
+          sliderValue={bestGCV !== "" ? bestGCV : sliderValues.domesticKcal}
+          setSliderValue={bestGCV !== "" ? setBestGCV : (newValue) => setSliderValues(prev => ({ ...prev, domesticKcal: newValue }))}
+          maximumValue={sliderValues.maxDomesticKcal}
+          minimumValue={sliderValues.minDomesticKcal}
         />
         <FuelSlider
           energyName="Wash Coal Kcal/Kg"
           sliderValue={sliderValues.washKcal}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, washKcal: newValue }))}
+          maximumValue={sliderValues.maxWashKcal}
+          minimumValue={sliderValues.minWashKcal}
         />
         <FuelSlider
           energyName="Import Kcal/Kg"
           sliderValue={sliderValues.importKcal}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, importKcal: newValue }))}
+          maximumValue={sliderValues.maxImportKcal}
+          minimumValue={sliderValues.minImportKcal}
         />
         {/* blue text start */}
         <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
@@ -346,11 +473,15 @@ const Fuel = () => {
           energyName="LDO Kcal/Kg"
           sliderValue={sliderValues.ldoKcal}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, ldoKcal: newValue }))}
+          maximumValue={sliderValues.maxLdoKcal}
+          minimumValue={sliderValues.minLdoKcal}
         />
         <FuelSlider
           energyName="FO Kcal/Kg"
           sliderValue={sliderValues.foKcal}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, foKcal: newValue }))}
+          maximumValue={sliderValues.maxFoKcal}
+          minimumValue={sliderValues.minFoKcal}
         />
         <View style={styles.smallSliderBottomContainer}>
           <Text style={styles.sliderBottomText}>heat Rate Kcal/Kwh</Text>
@@ -364,33 +495,46 @@ const Fuel = () => {
         {/* blue text end */}
         <FuelSlider
           energyName="Domestic MT"
-          sliderValue={sliderValues.domesticMt}
-          setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, domesticMt: newValue }))}
+          // sliderValue={sliderValues.domesticMt}
+          sliderValue={bestQuantity !== "" ? bestQuantity : sliderValues.domesticMt}
+          setSliderValue={bestQuantity !== "" ? setBestQuantity : (newValue) => setSliderValues(prev => ({ ...prev, domesticMt: newValue }))}
+          maximumValue={sliderValues.maxDomesticMt}
+          minimumValue={sliderValues.minDomesticMt}
         />
         <FuelSlider
           energyName="Wash Coal MT"
           sliderValue={sliderValues.washMt}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, washMt: newValue }))}
+          maximumValue={sliderValues.maxWashMt}
+          minimumValue={sliderValues.minWashMt}
         />
         <FuelSlider
           energyName="Import MT"
           sliderValue={sliderValues.importMt}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, importMt: newValue }))}
+          maximumValue={sliderValues.maxImportMt}
+          minimumValue={sliderValues.minImportMt}
         />
         <FuelSlider
           energyName="LDO KL"
           sliderValue={sliderValues.ldoKl}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, ldoKl: newValue }))}
+          maximumValue={sliderValues.maxLdoKl}
+          minimumValue={sliderValues.minLdoKl}
         />
         <FuelSlider
           energyName="FO KL"
           sliderValue={sliderValues.foKl}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, foKl: newValue }))}
+          maximumValue={sliderValues.maxFoKl}
+          minimumValue={sliderValues.minFoKl}
         />
         <FuelSlider
           energyName="Other Charges/Adjustment Rs. Cr."
           sliderValue={sliderValues.other}
           setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, other: newValue }))}
+          maximumValue={sliderValues.maxOther}
+          minimumValue={sliderValues.minOther}
         />
         </View>
         {/* blue text start */}

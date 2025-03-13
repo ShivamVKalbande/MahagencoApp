@@ -58,3 +58,31 @@ export async function postOperation(level: string, duration: string, plant: stri
         return {};
     }
 }
+export async function postSimulation( duration: string, Plant: string, tariff: string, unit: string, Source: string, Current: number) {
+    try {
+        // console.log("Full POST API URL:", `${API_URL}/getOperationDashboard`);
+        const res = await fetch(`${API_URL}/Gl`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ duration, Plant, tariff, unit, Source, Current }),
+        });
+
+        if (!res.ok) {
+            throw new Error(`Error fetching data: ${res.status}`);
+        }
+
+        const data = await res.json();
+        // console.log("API Response:", data);
+
+        if (!data || typeof data !== "object") {
+            throw new Error(`Invalid API response: ${JSON.stringify(data)}`);
+        }
+        
+        return data; // Ensure an empty object is returned instead of null
+    } catch (error) {
+        console.error('Error:', error);
+        return {};
+    }
+}
