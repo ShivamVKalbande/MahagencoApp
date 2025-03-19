@@ -27,7 +27,7 @@ const FuelSlider: React.FC<FuelSliderProp> = ({energyName, sliderValue, setSlide
               <Text>{energyName}</Text>
               <View style={{ flexDirection: 'row' }}>
                 <Slider
-                  style={styles.FuelSlider}
+                  style={[styles.FuelSlider, { width: width*0.68,}]}
                   value={sliderValue}
                   onValueChange={handleValueChange}
                   onSlidingComplete={handleSlidingComplete}
@@ -37,17 +37,17 @@ const FuelSlider: React.FC<FuelSliderProp> = ({energyName, sliderValue, setSlide
                   maximumTrackTintColor={colors.gray}
                   thumbTintColor={colors.skyblue}
                 />
-                <Text style={{ fontWeight: 'bold', width: width*0.14, }} >{sliderValue.toFixed(2)}</Text>
+                <Text style={{ fontWeight: 'bold', paddingHorizontal:5, width: width*0.2, fontSize:12}} >{sliderValue}</Text>
               </View>
               {/* Labels below the slider */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between',  width: width*0.72, left:15}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between',  width: width*0.6 , left:15}}>
                 <View>
                   <Text >|</Text>
-                  <Text >{minimumValue}</Text>
+                  <Text style={{fontSize:12}} >{minimumValue}</Text>
                 </View>
                 <View>
                   <Text style={{textAlign:'right'}}>|</Text>
-                  <Text >{maximumValue}</Text>
+                  <Text style={{fontSize:12}} >{maximumValue}</Text>
                 </View>
               </View>
             </View>

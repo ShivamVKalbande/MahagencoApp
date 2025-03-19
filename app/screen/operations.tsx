@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, ScrollView, Text, View } from 'react-native';
 import styles from '../css/style'
 import Dropdown from '../components/Dropdown';
@@ -63,11 +63,12 @@ const Operations = () => {
     setAvfValue(AVF_current);
   }, [AVF_current])
 
-  const [source, setSource] = useState('');
-  const [current, setCurrent] = useState(0);
+  // const [source, setSource] = useState('');
+  // const [current, setCurrent] = useState(0);
+  const sourceRef = useRef('');
+  const currentRef = useRef(0);
 
-
-  const getPlatMutation = useMutation({
+  const getPlantMutation = useMutation({
     mutationFn: () => getPlant(),
     onSuccess: (data) => {
       if (!data || !Array.isArray(data)) {
@@ -101,7 +102,7 @@ const Operations = () => {
   });
 
   useEffect(() => {
-    getPlatMutation.mutate(); // Initial fetch for plants
+    getPlantMutation.mutate(); // Initial fetch for plants
   }, []);
 
   useEffect(() => {
@@ -161,8 +162,35 @@ const Operations = () => {
 
   // gain/loss handle according to the simulation 
 
+// const simulationMutation = useMutation({
+//   mutationFn: () =>
+//     postSimulation(
+//       selectedItemTime?.value,
+//       selectedItem?.value,
+//       selectedTariff?.value,
+//       selectedUnit?.value,
+//       source,
+//       current
+//     ),
+//   onSuccess: (data) => {
+//     if (!data) {
+//       console.error("API response is null or undefined");
+//       return;
+//     }
+//     setTotalGainLoss(parseFloat(data.TotalGeration_Gain_loss));
+    
+//     if (source === 'avf') setAVF_gain_loss(parseFloat(data.individual_Gain_loss));
+//     if (source === 'soc') setSOC_gain_loss(parseFloat(data.individual_Gain_loss));
+//     if (source === 'apc') setAPC_gain_loss(parseFloat(data.individual_Gain_loss));
+//   },
+//   onError: (error) => {
+//     console.error("Error: ", error);
+//   },
+// });
+
+
 const simulationMutation = useMutation({
-  mutationFn: () =>
+  mutationFn: ({ source, current }) =>
     postSimulation(
       selectedItemTime?.value,
       selectedItem?.value,
@@ -184,22 +212,36 @@ const simulationMutation = useMutation({
   },
   onError: (error) => {
     console.error("Error: ", error);
+    // console.log("Error details:", JSON.stringify(error, null, 2));
   },
 });
 
+
 useEffect(() => {
+  let newSource = '';
+  let newCurrent = 0;
+
   if (avfValue !== AVF_current) {
-    setSource('avf');
-    setCurrent(avfValue);
-    simulationMutation.mutate();
+    newSource = 'avf';
+    newCurrent = avfValue;
   } else if (socValue !== SOC_current) {
-    setSource('soc');
-    setCurrent(socValue);
-    simulationMutation.mutate();
+    newSource = 'soc';
+    newCurrent = socValue;
   } else if (apcValue !== APC_current) {
-    setSource('apc');
-    setCurrent(apcValue);
-    simulationMutation.mutate();
+    newSource = 'apc';
+    newCurrent = apcValue;
+  }
+
+  if (newSource) {
+    // setSource(newSource);
+    // setCurrent(newCurrent);
+    // simulationMutation.mutate();
+    sourceRef.current = newSource;
+    currentRef.current = newCurrent;
+    simulationMutation.mutate({
+      source: sourceRef.current,
+      current: currentRef.current
+    });
   }
 }, [avfValue, socValue, apcValue]);
 

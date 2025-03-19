@@ -7,7 +7,7 @@ import FuelSlider from '../components/fuelSlider';
 import { useNavigation } from 'expo-router';
 import { useMutation } from '@tanstack/react-query';
 import { getPlant, getUnit } from '../api/operation';
-import { getFuel } from '../api/fuel';
+import { getFuel, getFuelSimulation } from '../api/fuel';
 import { useRoute } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
@@ -266,6 +266,36 @@ const Fuel = () => {
     operationMutation.mutate();
   }, [selectedItem?.value, selectedTariff?.value, selectedUnit?.value]);
 
+  // FOR SIMULATION FUEL 
+  //get fuel data from api
+  const fuelSimulationMutation = useMutation({
+    mutationFn: () => getFuelSimulation(sliderValues.gross, sliderValues.apc, sliderValues.ldoKl, sliderValues.ldoKcal, sliderValues.foKcal, sliderValues.foKl, sliderValues.domestic, sliderValues.domesticKcal, sliderValues.wash, sliderValues.import, sliderValues.domesticMt, sliderValues.washMt, sliderValues.importMt, sliderValues.ldoKl, sliderValues.foKl, selectedUnit?.value, selectedItem?.value, sliderValues.other, sliderValues.soc, sliderValues.importKcal, sliderValues.washKcal),
+    onSuccess: (data) => {
+      if (!data) {
+        console.error("API response is null or undefined");
+        return;
+      }
+      setSliderValues(prev => ({ ...prev, apcPercent: data.APC }));
+      setSliderValues(prev => ({ ...prev, netGeneration: data.Net_Generation_MU }));
+      setSliderValues(prev => ({ ...prev, ldoHeatContentMKcal: data.LDO_Heat_Content_MKCal }));
+      setSliderValues(prev => ({ ...prev, foHeatContentMKCal: data.FO_Heat_Content_MKCal }));
+      setSliderValues(prev => ({ ...prev, coalMKCal: data.Coal_Heat_Content_MKCal }));
+      setSliderValues(prev => ({ ...prev, TotalMKCal: data.Total_Heat_Content_MKCal }));
+      setSliderValues(prev => ({ ...prev, coalMt: data.Coal_Consumption_MT }));
+      setSliderValues(prev => ({ ...prev, totalCost: data.Total_Fuel_Cost_Rs_Crore }));
+      setSliderValues(prev => ({ ...prev, energyKwh: data.Energy_Charges_Rs_Kwh }));
+    },
+    onError: (error) => {
+      console.error("Error: ", error);
+    },
+  });
+
+  useEffect(() => {
+    fuelSimulationMutation.mutate();
+  }, [sliderValues.gross, sliderValues.apc, sliderValues.ldoKl, sliderValues.ldoKcal, sliderValues.foKcal, sliderValues.foKl, sliderValues.domestic, sliderValues.domesticKcal, sliderValues.wash, sliderValues.import, sliderValues.domesticMt, sliderValues.washMt, sliderValues.importMt, sliderValues.ldoKl, sliderValues.foKl, selectedUnit?.value, selectedItem?.value, sliderValues.other, sliderValues.soc, sliderValues.importKcal, sliderValues.washKcal]);
+
+
+
   //for tarrif 
   useEffect(() => {
     if (selectedTariff.value === "tariff1" || selectedTariff.value === "tariff2") {
@@ -323,7 +353,7 @@ const Fuel = () => {
           <Text>Year 2025</Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={{ fontWeight: 'bold' }}>Enery Charges:</Text>
-            <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>{sliderValues.energyKwh.toFixed(2)} Rs./Kwh</Text>
+            <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>{sliderValues.energyKwh} Rs./Kwh</Text>
             <TouchableOpacity
               onPress={() => navigation.navigate("screen/fuelCombination", { coalQuantity: sliderValues.domesticMt, coalRate:sliderValues.domestic, coalGcv:sliderValues.domesticKcal } )}
               style={[styles.plantButton, { left: width * 0.15, paddingHorizontal: 15 }]}
@@ -338,7 +368,7 @@ const Fuel = () => {
         </View>
         {/* heading end */}
         {/* slider Start */}
-        <View style={{width:width*0.85,}}>
+        <View style={styles.fuelBoxBorder}>
           <FuelSlider
             energyName="Gross Generation MU"
             sliderValue={sliderValues.gross}
@@ -368,7 +398,7 @@ const Fuel = () => {
         </View>
 
         {/* slider Buttom Container End */}
-        <View style={{width:width*0.85,}}>
+        <View style={styles.fuelBoxBorder}>
         <FuelSlider
           energyName="SOC KL"
           sliderValue={sliderValues.soc}
@@ -396,7 +426,7 @@ const Fuel = () => {
           <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Land Coal Price</Text>
         </View>
         {/* blue text end */}
-        <View style={{width:width*0.85,}}>
+        <View style={styles.fuelBoxBorder}>
         <FuelSlider
           energyName="Domestic Rs/MT"
           sliderValue={bestRate !== "" ? bestRate : sliderValues.domestic}

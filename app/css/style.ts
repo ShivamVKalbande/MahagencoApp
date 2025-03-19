@@ -477,6 +477,13 @@ const styles = StyleSheet.create({
         left: width * 0.4, 
         marginHorizontal: 5,
     },
+    // fuel slider border
+    fuelBoxBorder:{width:width*0.89, 
+        borderLeftWidth:0.2, 
+        borderRightWidth:0.2, 
+        paddingHorizontal:5, 
+        borderColor:colors.gray
+    },
 });
 
 export default styles;

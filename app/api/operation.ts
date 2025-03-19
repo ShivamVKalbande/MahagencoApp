@@ -61,6 +61,12 @@ export async function postOperation(level: string, duration: string, plant: stri
 export async function postSimulation( duration: string, Plant: string, tariff: string, unit: string, Source: string, Current: number) {
     try {
         // console.log("Full POST API URL:", `${API_URL}/getOperationDashboard`);
+        console.log("plant: ", Plant);
+        console.log("duration: ", duration);
+        console.log("tariff: ", tariff);
+        console.log("unit: ", unit);
+        console.log("Source: ", Source);
+        console.log("Current: ", Current);
         const res = await fetch(`${API_URL}/Gl`, {
             method: 'POST',
             headers: {
@@ -82,7 +88,7 @@ export async function postSimulation( duration: string, Plant: string, tariff: s
         
         return data; // Ensure an empty object is returned instead of null
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error simulation:', error);
         return {};
     }
 }
