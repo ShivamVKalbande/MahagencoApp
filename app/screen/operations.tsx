@@ -58,7 +58,7 @@ const Operations = () => {
   const [AVF_gain_loss, setAVF_gain_loss] = useState(0);
   const [AVF_current, setAVF_current] = useState(0);
   const [AVF_target, setAVF_target] = useState(0);
-  const [avfValue, setAvfValue] = useState<number>(0);
+  const [avfValue, setAvfValue] = useState(0.0);
   useEffect(() => {
     setAvfValue(AVF_current);
   }, [AVF_current])
@@ -272,7 +272,7 @@ useEffect(() => {
         <ScreenCard
           title="Year 2024-25"
           subTitle="Mahagenco Target"
-          value={totalGeneration.toFixed(2)}
+          value={totalGeneration}
           progress={0.6}
           current={totalGainLoss}
           circleHeading="Current Generation"
@@ -312,7 +312,7 @@ useEffect(() => {
             {/* belove text start */}
             <View style={styles.aboveContainer}>
               <View style={[styles.aboveTextContainer, { width: width * 0.3, }]}>
-                <Text style={{ fontSize: 12 }}>Total: {totalGeneration.toFixed(2)}</Text>
+                <Text style={{ fontSize: 12 }}>Total: {totalGeneration}</Text>
               </View>
               <View style={[styles.aboveTextContainer, { width: width * 0.3, }]}>
                 <Text style={{ fontSize: 12 }}>Total: {plf}</Text>
@@ -332,14 +332,14 @@ useEffect(() => {
                 <Text style={{ color: colors.skyblue }}>AVF</Text>
               </View>
               <View style={styles.aboveTextContainer2}>
-                <Text style={{ fontSize: 12 }}>Target: {AVF_target} | Actual: {AVF_current} | simulation:{avfValue.toFixed(2)}</Text>
+                <Text style={{ fontSize: 12 }}>Target: {AVF_target} | Actual: {AVF_current} | simulation:{avfValue}</Text>
               </View>
             </View>
             {/* above Text end */}
             {/* belove text start */}
             <View style={styles.aboveContainer}>
               <View style={styles.aboveTextContainer}>
-                <Text style={{ fontSize: 12 }}>Gain/Loss {AVF_gain_loss.toFixed(2)}</Text>
+                <Text style={{ fontSize: 12 }}>Gain/Loss {AVF_gain_loss}</Text>
               </View>
               <View style={{ width: width * 0.16, }}>
                 <SliderBar
@@ -364,14 +364,14 @@ useEffect(() => {
                 <Text style={{ color: colors.skyblue }}>SOC</Text>
               </View>
               <View style={styles.aboveTextContainer2}>
-                <Text style={{ fontSize: 12 }}>Target: {SOC_target}| Actual: {SOC_current} | simulation:{socValue.toFixed(2)}</Text>
+                <Text style={{ fontSize: 12 }}>Target: {SOC_target}| Actual: {SOC_current} | simulation:{socValue}</Text>
               </View>
             </View>
             {/* above Text end */}
             {/* belove text start */}
             <View style={styles.aboveContainer}>
               <View style={styles.aboveTextContainer}>
-                <Text style={{ fontSize: 12 }}>Gain/Loss {SOC_gain_loss.toFixed(2)}</Text>
+                <Text style={{ fontSize: 12 }}>Gain/Loss {SOC_gain_loss}</Text>
               </View>
               <View style={{ width: width * 0.16, }}>
                 <SliderBar
@@ -395,14 +395,14 @@ useEffect(() => {
                 <Text style={{ color: colors.skyblue }}>APC</Text>
               </View>
               <View style={styles.aboveTextContainer2}>
-                <Text style={{ fontSize: 12 }}>Target: {APC_target}| Actual: {APC_current} | simulation:{apcValue.toFixed(2)}</Text>
+                <Text style={{ fontSize: 12 }}>Target: {APC_target}| Actual: {APC_current} | simulation:{apcValue}</Text>
               </View>
             </View>
             {/* above Text end */}
             {/* belove text start */}
             <View style={styles.aboveContainer}>
               <View style={styles.aboveTextContainer}>
-                <Text style={{ fontSize: 12 }}>Gain/Loss {APC_gain_loss.toFixed(2)}</Text>
+                <Text style={{ fontSize: 12 }}>Gain/Loss {APC_gain_loss}</Text>
               </View>
               <View style={{ width: width * 0.16, }}>
                 <SliderBar
@@ -426,7 +426,7 @@ useEffect(() => {
                 <Text style={{ color: colors.skyblue }}>SHR</Text>
               </View>
               <View style={styles.aboveTextContainer2}>
-                <Text style={{ fontSize: 12 }}>Target: 45| Actual: 45 | simulation:{shrValue.toFixed(2)}</Text>
+                <Text style={{ fontSize: 12 }}>Target: 45| Actual: 45 | simulation:{shrValue}</Text>
               </View>
             </View>
             {/* above Text end */}
@@ -457,7 +457,7 @@ useEffect(() => {
                 <Text style={{ color: colors.skyblue }}>CV-Commercial</Text>
               </View>
               <View style={styles.aboveTextContainer2}>
-                <Text style={{ fontSize: 12 }}>Target: 45| Actual: 45| simulation:{cvValue.toFixed(2)}</Text>
+                <Text style={{ fontSize: 12 }}>Target: 45| Actual: 45| simulation:{cvValue}</Text>
               </View>
             </View>
             {/* above Text end */}
@@ -488,7 +488,7 @@ useEffect(() => {
                 <Text style={{ color: colors.skyblue }}>TL</Text>
               </View>
               <View style={styles.aboveTextContainer2}>
-                <Text style={{ fontSize: 12 }}>Target: 45| Actual: 45| simulation:{tlValue.toFixed(2)}</Text>
+                <Text style={{ fontSize: 12 }}>Target: 45| Actual: 45| simulation:{tlValue}</Text>
               </View>
             </View>
             {/* above Text end */}

@@ -1,9 +1,10 @@
-import { View, Text, Modal, Pressable, Dimensions } from 'react-native';
+import { View, Text, Pressable, Dimensions } from 'react-native';
 import React from 'react';
 import styles from '../css/style';
 import { colors } from '@/constant/color';
 import { useAuth } from '../store/authStore';
 import { useNavigation } from 'expo-router';
+import Modal from 'react-native-modal';
 
 const { width } = Dimensions.get("window");
 
@@ -12,24 +13,27 @@ interface logoutProp {
   setModalVisible: (param: boolean) => void;
 }
 
-const LogoutModal:React.FC<logoutProp> = ({ modalVisible, setModalVisible }) => {
+const LogoutModal: React.FC<logoutProp> = ({ modalVisible, setModalVisible }) => {
   const logout = useAuth((state) => state.logout);
   const navigation = useNavigation<any>();
 
   return (
     <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={() => setModalVisible(false)}
+      animationIn={'slideInDown'}
+      animationInTiming={300}
+      // transparent={true}
+      backdropOpacity={0.70}
+      isVisible={modalVisible}
+      onBackButtonPress={() => setModalVisible(false)}
+      onBackdropPress={() => setModalVisible(false)}
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text>Are you sure you want to logout?</Text>
           <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 20 }}>
-            
+
             {/* No Button */}
-            <Pressable 
+            <Pressable
               onPress={() => setModalVisible(false)}
               style={[styles.plantButton, { paddingHorizontal: 15, marginHorizontal: 5 }]}
             >
@@ -37,11 +41,11 @@ const LogoutModal:React.FC<logoutProp> = ({ modalVisible, setModalVisible }) => 
             </Pressable>
 
             {/* Yes Button */}
-            <Pressable 
+            <Pressable
               onPress={async () => {
                 setModalVisible(false);
-                await logout(); 
-                navigation.navigate('screen/home'); 
+                await logout();
+                navigation.navigate('screen/home');
               }}
               style={[styles.plantButton, { paddingHorizontal: 15, marginHorizontal: 5 }]}
             >

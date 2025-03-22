@@ -224,7 +224,9 @@ const Bunker = () => {
               )}
             />
           )}
-          <View style={styles.tableData}>
+          <View style={[styles.tableData,
+            //  { borderTopWidth: 0.2, }
+            ]}>
             <View style={{ width: width * 0.3 }}>
             </View>
             <View style={{ width: width * 0.3 }}>

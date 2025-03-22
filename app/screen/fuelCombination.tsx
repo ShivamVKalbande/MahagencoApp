@@ -68,35 +68,50 @@ const FuelCombination = () => {
             <View style={styles.mainContainer}>
                 {/* INPUT CONTAINER START */}
                 <View style={{ flexDirection: 'row' }}>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.TextInput}
-                            placeholder="DomesticMT"
-                            placeholderTextColor={colors.secondary}
-                            keyboardType="numeric"
-                            value={domestic}
-                            onChangeText={text => setDomestic(text)}
-                        />
+                    <View
+                        style={styles.fuelTextHeading}
+                    >
+                        <Text style={[styles.smallLabel, { textAlign: 'center' }]}>DomesticMT</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.TextInput}
+                                placeholder="DomesticMT"
+                                placeholderTextColor={colors.secondary}
+                                keyboardType="numeric"
+                                value={domestic}
+                                onChangeText={text => setDomestic(text)}
+                            />
+                        </View>
                     </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.TextInput}
-                            placeholder="Rate"
-                            placeholderTextColor={colors.secondary}
-                            keyboardType="numeric"
-                            value={rate}
-                            onChangeText={text => setRate(text)}
-                        />
+                    <View
+                        style={styles.fuelTextHeading}
+                    >
+                        <Text style={{ textAlign: 'center' }}>Rate</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.TextInput}
+                                placeholder="Rate"
+                                placeholderTextColor={colors.secondary}
+                                keyboardType="numeric"
+                                value={rate}
+                                onChangeText={text => setRate(text)}
+                            />
+                        </View>
                     </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.TextInput}
-                            placeholder="GCV"
-                            placeholderTextColor={colors.secondary}
-                            keyboardType="numeric"
-                            value={gcv}
-                            onChangeText={text => setGcv(text)}
-                        />
+                    <View
+                        style={styles.fuelTextHeading}
+                    >
+                        <Text style={{ textAlign: 'center' }}>GCV</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={[styles.TextInput, { paddingHorizontal: 5, }]}
+                                placeholder="GCV"
+                                placeholderTextColor={colors.secondary}
+                                keyboardType="numeric"
+                                value={gcv}
+                                onChangeText={text => setGcv(text)}
+                            />
+                        </View>
                     </View>
                 </View>
                 {/* INPUT CONTAINER END */}
@@ -180,8 +195,8 @@ const FuelCombination = () => {
                                         <Text style={{ color: colors.skyblue }}>{item.WeightedAverageGCV}</Text>
                                         {/* Button Start */}
                                         <TouchableOpacity
-                                            onPress={() => navigation.navigate("screen/fuel", {bestQuantity: item.TotalQuantity, bestRate: item.WeightedAverageRate, bestGCV: item.WeightedAverageGCV})}
-                                            style={[styles.plantButton, { paddingHorizontal: 15, left:width*0.3, top:-20, }]}
+                                            onPress={() => navigation.navigate("screen/fuel", { bestQuantity: item.TotalQuantity, bestRate: item.WeightedAverageRate, bestGCV: item.WeightedAverageGCV, simulationMode: true, buttonColor: colors.skyblue })}
+                                            style={[styles.plantButton, { paddingHorizontal: 15, left: width * 0.3, top: -20, }]}
                                         >
                                             <Text style={[styles.smallLabel, { color: colors.white }]}>Ok</Text>
                                         </TouchableOpacity>

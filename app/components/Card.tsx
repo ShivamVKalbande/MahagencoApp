@@ -34,8 +34,8 @@ const Card: React.FC<CardProp> = ({ title, subTitle, value, progress, current, m
         </View>
         <Text style={{color:colors.green}}>{ secondTitle }</Text>
         <View style={[styles.textContainer, { borderColor: colors.lightGray, flexDirection: 'row' }]}>
-          <Text style={[styles.mediumLabel, { fontWeight: 'bold' }]}>{current}</Text>
-          <Text style={[styles.mediumLabel, { color: colors.red }]}>{ meter }</Text>
+          <Text style={[styles.mediumLabel, { fontWeight: 'bold' }]}>{current} <Text style={[styles.mediumLabel, { fontWeight:'normal' }]}>{ meter }</Text></Text>
+          
         </View>
       </View>
 

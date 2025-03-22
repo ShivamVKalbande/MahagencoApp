@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Pressable } from 'react-native'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Dropdown from '../components/Dropdown'
 import { colors } from '@/constant/color';
@@ -14,12 +14,13 @@ const { width } = Dimensions.get('window');
 const Fuel = () => {
 
   const route = useRoute();
-  const { bestQuantity: initialBestQuantity = '', bestRate: initialBestRate = '', bestGCV: initialBestGCV = '' } = route.params || {};
+  const { bestQuantity: initialBestQuantity = '', bestRate: initialBestRate = '', bestGCV: initialBestGCV = '', simulationMode : initialSimulationMode = false, buttonColor : initialButtonColor = colors.lightblue } = route.params || {};
 
   const [bestRate, setBestRate] = useState(initialBestRate || '');
   const [bestQuantity, setBestQuantity] = useState(initialBestQuantity || '');
   const [bestGCV, setBestGCV] = useState(initialBestGCV || '');
-
+  const [simulationMode, setSimulationMode] = useState(initialSimulationMode || false);
+  const [SimulationButtonColor, setSimulationButtonColor] = useState(initialButtonColor || colors.lightblue);
   const navigation = useNavigation<any>();
   const [plant, setPlant] = useState([{ label: "BTPS", value: "btps" }]);
   const duration = useMemo(() => [
@@ -37,8 +38,8 @@ const Fuel = () => {
   const [unit, setUnit] = useState([{ label: "UNIT03", value: "UNIT03" }]);
   const [selectedTariff, setSelectedTariff] = useState(tariff[0]);
   const [selectedUnit, setSelectedUnit] = useState(unit[0]);
-
-
+  const [simulationButton, setSimulationButton] = useState(simulationMode);
+  const [buttonColor, setButtonColor] = useState(SimulationButtonColor);
   // slider data start
   const [sliderValues, setSliderValues] = useState({
     gross: 0,
@@ -270,17 +271,17 @@ const Fuel = () => {
   //get fuel data from api
   const fuelSimulationMutation = useMutation({
     mutationFn: () => getFuelSimulation(
-      sliderValues.gross, 
-      sliderValues.apc, 
-      sliderValues.ldoKl, 
-      sliderValues.ldoKcal, 
-      sliderValues.foKcal, 
-      sliderValues.foKl, 
+      sliderValues.gross,
+      sliderValues.apc,
+      sliderValues.ldoKl,
+      sliderValues.ldoKcal,
+      sliderValues.foKcal,
+      sliderValues.foKl,
       // sliderValues.domestic,
-      bestRate !== "" ? bestRate : sliderValues.domestic, 
+      bestRate !== "" ? bestRate : sliderValues.domestic,
       // sliderValues.domesticKcal,
-      bestGCV !== "" ? bestGCV : sliderValues.domesticKcal, 
-      sliderValues.wash, sliderValues.import, 
+      bestGCV !== "" ? bestGCV : sliderValues.domesticKcal,
+      sliderValues.wash, sliderValues.import,
       // sliderValues.domesticMt, 
       bestQuantity !== "" ? bestQuantity : sliderValues.domesticMt,
       sliderValues.washMt, sliderValues.importMt, sliderValues.ldoKl, sliderValues.foKl, selectedUnit?.value, selectedItem?.value, sliderValues.other, sliderValues.soc, sliderValues.importKcal, sliderValues.washKcal),
@@ -306,7 +307,7 @@ const Fuel = () => {
 
   useEffect(() => {
     fuelSimulationMutation.mutate();
-  }, [sliderValues.gross, sliderValues.apc, sliderValues.ldoKl, sliderValues.ldoKcal, sliderValues.foKcal, sliderValues.foKl, sliderValues.domestic, sliderValues.domesticKcal, sliderValues.wash, sliderValues.import, sliderValues.domesticMt, sliderValues.washMt, sliderValues.importMt, sliderValues.ldoKl, sliderValues.foKl, selectedUnit?.value, selectedItem?.value, sliderValues.other, sliderValues.soc, sliderValues.importKcal, sliderValues.washKcal, bestRate, bestGCV, bestQuantity]);
+  }, [simulationButton]);
 
 
 
@@ -325,6 +326,11 @@ const Fuel = () => {
       // operationMutation.mutate();
     }
   }, [selectedUnit]);
+
+  const simulationFunction = () => {
+    setSimulationButton(true);
+    setButtonColor(colors.skyblue)
+  }
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -332,8 +338,37 @@ const Fuel = () => {
     >
       {/* main content start */}
       <View style={styles.mainContainer}>
+        {/* Optimization Button Start */}
+        <View style={{flexDirection:'row'}}>
+        <View style={{padding:10}}>
+            <Pressable
+              onPress={simulationFunction}
+              style={[styles.plantButton, { paddingHorizontal: 15, backgroundColor: buttonColor,}]}
+            >
+              <Text style={[
+                styles.smallLabel,
+                { color: colors.white, textAlign: 'center' }]}
+              >Simulation</Text>
+            </Pressable>
+            </View>
+          <View 
+          pointerEvents={simulationButton ? 'auto' : 'none'}
+          style={{ padding:10 }} 
+          >
+            <TouchableOpacity
+              onPress={() => navigation.navigate("screen/fuelCombination", { coalQuantity: sliderValues.domesticMt, coalRate: sliderValues.domestic, coalGcv: sliderValues.domesticKcal })}
+              style={[styles.plantButton, { paddingHorizontal: 15, backgroundColor: buttonColor, }]}
+            >
+              <Text style={[
+                styles.smallLabel,
+                { color: colors.white, textAlign: 'center' }]}
+              >Fuel Optimization</Text>
+            </TouchableOpacity>
+            </View>
+          </View>
+        {/* Optimization Button End */}
         {/* dropdown start */}
-        <View style={styles.mainDropeDown}>
+        <View style={styles.mainDropeDown}>          
           <Dropdown
             name="Mahagenco"
             data={plant}
@@ -366,19 +401,12 @@ const Fuel = () => {
         <View style={styles.detailChartContainer}>
           <Text>Year 2025</Text>
           <View style={{ flexDirection: 'row' }}>
+          <View style={{ width: width * 0.24 }}>
             <Text style={{ fontWeight: 'bold' }}>Enery Charges:</Text>
-            <View style={{width: width*0.33}}>
-            <Text style={{ color: colors.skyblue, fontWeight: 'bold', }}>{sliderValues.energyKwh} Rs./Kwh</Text>
-            </View>           
-            <TouchableOpacity
-              onPress={() => navigation.navigate("screen/fuelCombination", { coalQuantity: sliderValues.domesticMt, coalRate: sliderValues.domestic, coalGcv: sliderValues.domesticKcal })}
-              style={[styles.plantButton, {  paddingHorizontal: 15 }]}
-            >
-              <Text style={[
-                styles.smallLabel,
-                { color: colors.white, textAlign:'center' }]}
-              >Fuel Combination</Text>
-            </TouchableOpacity>
+            </View>
+            <View style={{ width: width * 0.4 }}>
+              <Text style={{ color: colors.skyblue, fontWeight: 'bold', }}>{sliderValues.energyKwh} Rs./Kwh</Text>
+            </View>
           </View>
 
         </View>
@@ -391,6 +419,8 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, gross: newValue }))}
             maximumValue={sliderValues.maxGross}
             minimumValue={sliderValues.minGross}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="APC MU"
@@ -398,6 +428,8 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, apc: newValue }))}
             maximumValue={sliderValues.maxApc}
             minimumValue={sliderValues.minApc}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
         </View>
         {/* slider Buttom Container start */}
@@ -421,6 +453,8 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, soc: newValue }))}
             maximumValue={sliderValues.maxSoc}
             minimumValue={sliderValues.minSoc}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <View style={styles.smallSliderBottomContainer}>
             <Text style={styles.sliderBottomText}>SOC ml/Kwh</Text>
@@ -445,10 +479,14 @@ const Fuel = () => {
         <View style={styles.fuelBoxBorder}>
           <FuelSlider
             energyName="Domestic Rs/MT"
-            sliderValue={bestRate !== "" ? bestRate : sliderValues.domestic}
-            setSliderValue={bestRate !== "" ? setBestRate : (newValue) => setSliderValues(prev => ({ ...prev, domestic: newValue }))}
+            sliderValue={sliderValues.domestic}
+            // sliderValue={bestRate !== "" ? bestRate : sliderValues.domestic}
+            setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, domestic: newValue }))}
+            // setSliderValue={bestRate !== "" ? setBestRate : (newValue) => setSliderValues(prev => ({ ...prev, domestic: newValue }))}
+            bestCombination={bestRate}
             maximumValue={sliderValues.maxDomestic}
             minimumValue={sliderValues.minDomestic}
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="Wash Coal Rs/MT"
@@ -456,6 +494,8 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, wash: newValue }))}
             maximumValue={sliderValues.maxWash}
             minimumValue={sliderValues.minWash}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="Import Rs/MT"
@@ -463,19 +503,24 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, import: newValue }))}
             maximumValue={sliderValues.maxImport}
             minimumValue={sliderValues.minImport}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
-
+        </View>
           {/* blue text start */}
           <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
             <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Land Oil Price</Text>
           </View>
           {/* blue text end */}
+          <View style={styles.fuelBoxBorder}>
           <FuelSlider
             energyName="LDO Rs/KL"
             sliderValue={sliderValues.ldo}
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, ldo: newValue }))}
             maximumValue={sliderValues.maxLdo}
             minimumValue={sliderValues.minLdo}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="FO Rs/KL"
@@ -483,18 +528,26 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, fo: newValue }))}
             maximumValue={sliderValues.maxFo}
             minimumValue={sliderValues.minFo}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
+          </View>
           {/* blue text start */}
           <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
             <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>GCV Coal</Text>
           </View>
           {/* blue text end */}
+          <View style={styles.fuelBoxBorder}>
           <FuelSlider
             energyName="Domestic Kcal/Kg"
-            sliderValue={bestGCV !== "" ? bestGCV : sliderValues.domesticKcal}
-            setSliderValue={bestGCV !== "" ? setBestGCV : (newValue) => setSliderValues(prev => ({ ...prev, domesticKcal: newValue }))}
+            sliderValue={sliderValues.domesticKcal}
+            // sliderValue={bestGCV !== "" ? bestGCV : sliderValues.domesticKcal}
+            setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, domesticKcal: newValue }))}
+            // setSliderValue={bestGCV !== "" ? setBestGCV : (newValue) => setSliderValues(prev => ({ ...prev, domesticKcal: newValue }))}
             maximumValue={sliderValues.maxDomesticKcal}
             minimumValue={sliderValues.minDomesticKcal}
+            bestCombination={bestGCV}
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="Wash Coal Kcal/Kg"
@@ -502,6 +555,8 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, washKcal: newValue }))}
             maximumValue={sliderValues.maxWashKcal}
             minimumValue={sliderValues.minWashKcal}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="Import Kcal/Kg"
@@ -509,18 +564,24 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, importKcal: newValue }))}
             maximumValue={sliderValues.maxImportKcal}
             minimumValue={sliderValues.minImportKcal}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
+          </View>
           {/* blue text start */}
           <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
             <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>GCV - Oil</Text>
           </View>
           {/* blue text end */}
+          <View style={styles.fuelBoxBorder}>
           <FuelSlider
             energyName="LDO Kcal/Kg"
             sliderValue={sliderValues.ldoKcal}
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, ldoKcal: newValue }))}
             maximumValue={sliderValues.maxLdoKcal}
             minimumValue={sliderValues.minLdoKcal}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="FO Kcal/Kg"
@@ -528,24 +589,30 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, foKcal: newValue }))}
             maximumValue={sliderValues.maxFoKcal}
             minimumValue={sliderValues.minFoKcal}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <View style={styles.smallSliderBottomContainer}>
             <Text style={styles.sliderBottomText}>heat Rate Kcal/Kwh</Text>
             <Text style={styles.sliderBottomText}>0.0</Text>
           </View>
-
+        </View>
           {/* blue text start */}
           <View style={[styles.detailChartContainer, { width: width * 0.9 }]}>
             <Text style={{ color: colors.skyblue, fontWeight: 'bold' }}>Consumption</Text>
           </View>
           {/* blue text end */}
+          <View style={styles.fuelBoxBorder}>
           <FuelSlider
             energyName="Domestic MT"
-            // sliderValue={sliderValues.domesticMt}
-            sliderValue={bestQuantity !== "" ? bestQuantity : sliderValues.domesticMt}
-            setSliderValue={bestQuantity !== "" ? setBestQuantity : (newValue) => setSliderValues(prev => ({ ...prev, domesticMt: newValue }))}
+            sliderValue={sliderValues.domesticMt}
+            // sliderValue={bestQuantity !== "" ? bestQuantity : sliderValues.domesticMt}
+            // setSliderValue={bestQuantity !== "" ? setBestQuantity : (newValue) => setSliderValues(prev => ({ ...prev, domesticMt: newValue }))}
+            setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, domesticMt: newValue }))}
             maximumValue={sliderValues.maxDomesticMt}
             minimumValue={sliderValues.minDomesticMt}
+            bestCombination={bestQuantity}
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="Wash Coal MT"
@@ -553,6 +620,8 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, washMt: newValue }))}
             maximumValue={sliderValues.maxWashMt}
             minimumValue={sliderValues.minWashMt}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="Import MT"
@@ -560,6 +629,8 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, importMt: newValue }))}
             maximumValue={sliderValues.maxImportMt}
             minimumValue={sliderValues.minImportMt}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="LDO KL"
@@ -567,6 +638,8 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, ldoKl: newValue }))}
             maximumValue={sliderValues.maxLdoKl}
             minimumValue={sliderValues.minLdoKl}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="FO KL"
@@ -574,6 +647,8 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, foKl: newValue }))}
             maximumValue={sliderValues.maxFoKl}
             minimumValue={sliderValues.minFoKl}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
           <FuelSlider
             energyName="Other Charges/Adjustment Rs. Cr."
@@ -581,6 +656,8 @@ const Fuel = () => {
             setSliderValue={(newValue) => setSliderValues(prev => ({ ...prev, other: newValue }))}
             maximumValue={sliderValues.maxOther}
             minimumValue={sliderValues.minOther}
+            bestCombination=''
+            fuelSimulation={simulationButton}
           />
         </View>
         {/* blue text start */}

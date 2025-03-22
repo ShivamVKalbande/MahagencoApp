@@ -1,5 +1,6 @@
 import { colors } from "@/constant/color";
 import { Dimensions, StyleSheet } from "react-native";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -54,6 +55,12 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 10,
         flexDirection: 'row',
+    },
+    cardLeft:{
+        width: width * 0.5,
+    },
+    cardRight:{
+        width: width * 0.3,
     },
     textContainer: {
         gap: 10,
@@ -249,7 +256,25 @@ const styles = StyleSheet.create({
         marginBottom:10,
     },
     FuelSlider:{
-        width: width*0.8,
+        width: width * 0.58,
+    },
+    fuelSliderLower:{ 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        width: width * 0.5, 
+        // left: width * 0.14, 
+        top: -width * 0.06 
+    },
+    fuelSliderText:{ 
+        fontWeight: 'bold', 
+        paddingHorizontal: 5, 
+        // width: width * 0.2, 
+        fontSize: 12,
+        top:width * 0.06,
+    },
+    customFuelContainer:{ 
+        left: width * 0.01, 
+        top:width * 0.06, 
     },
     labelContainer: {
         flexDirection: 'row',
@@ -277,7 +302,8 @@ const styles = StyleSheet.create({
       },
      buttonText: {
         textAlign:'center', 
-        color:colors.white
+        color:colors.white,
+        fontSize:12,
     },
     // material card
 
@@ -311,6 +337,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         paddingVertical: 10, 
         borderBottomWidth: 0.2, 
+        borderRightWidth:0.2,
+        borderLeftWidth:0.2,
         borderBottomColor: colors.gray, 
     },
     tableHeadText:{
@@ -352,7 +380,8 @@ const styles = StyleSheet.create({
     plantButton:{
         backgroundColor:colors.skyblue,
         // width:width*0.2,
-        height:width*0.08,
+        // height:width*0.08,
+        padding:5,
         borderRadius:width*0.5,
         left:width*0.01,
         justifyContent:'center',
@@ -428,12 +457,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         margin:10,
-        width:width*0.28
+        width:width*0.29
       },
       TextInput: {
         flex: 1,
         paddingHorizontal: 10,
        
+      },
+      fuelTextHeading:{
+        fontSize: 16,
+        fontWeight:'600',
+        paddingTop:10,
+        // backgroundColor:Colors.white,
+        // position:'absolute'
       },
       combinationContainer:{
         margin:10,
@@ -478,9 +514,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
     },
     // fuel slider border
-    fuelBoxBorder:{width:width*0.89, 
+    fuelBoxBorder:{
+        width:width*0.89, 
         borderLeftWidth:0.2, 
         borderRightWidth:0.2, 
+        // elevation:1,
+        // borderTopWidth:0.2,
+        // borderBottomWidth:0.2,
         paddingHorizontal:5, 
         borderColor:colors.gray
     },

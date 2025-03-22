@@ -8,42 +8,26 @@ import { Link, useRouter } from 'expo-router';
 import Card from './components/Card';
 import LogoutModal from './components/logoutModal';
 import { useAuth } from './store/authStore';
+import { useMutation } from '@tanstack/react-query';
+import { getCard } from './api/card';
+import FinanceCard from './components/financeCard';
+import ScreenCard from './components/ScreenCard';
 // import Carousel from 'react-native-snap-carousel';
 
 const { width } = Dimensions.get('window');
 // const size = width * 0.25; // Size of the circle
 
-const data = [
-    {
-        id: "1",
-        title: "Year 2023",
-        subTitle: "Mahagenco Target",
-        value: "200 Unit",
-        progress: 0.6,
-        current: "150",
-        unit: "Unit",
-        aboveText: "Current",
-        belowText: "Generation",
-        meter: "Gain/Loss",
-        secondTitle: "",
-        innerStroke: colors.red,
-    },
-    {
-        id: "2",
-        title: "Year 2023",
-        subTitle: "Budget Allocate",
-        value: "23,43,41,41,140.82 Rs",
-        progress: 0.6,
-        current: "8,01,51,40,795",
-        unit: "Rs",
-        aboveText: "Budget",
-        belowText: "Consumed",
-        meter: "",
-        secondTitle: "Budget Allocate",
-        innerStroke: colors.red,
-    },
-];
+
 const Home = () => {
+
+    const [budget, setBudget] = useState('');
+    const [consumable, setConsumable] = useState('');
+    const [available, setAvailable] = useState('');
+    const [working, setWorking] = useState('');
+    const [vacancy, setVacancy] = useState('');
+    const [totalGeneration, setTotalGeneration] = useState('');
+    const [totalGainLoss, setTotalGainLoss] = useState('');
+
 
     const [logoutModalVisible, setLogoutModalVisible] = useState(false);
     const isLoggedIn = useAuth((s) => !!s.id);
@@ -69,6 +53,58 @@ const Home = () => {
     // };
 
     // const extendedData = [...data, ...data, ...data];
+
+    // get card details 
+    const getCardMutation = useMutation({
+        mutationFn: () => getCard(),
+        onSuccess: (data) => {
+            if (!data) {
+                console.error("Invalid card API response");
+                return;
+            }
+            setBudget(data.budget);
+            setConsumable(data.Consumable);
+            setAvailable(data.Available);
+            setWorking(data.Working);
+            setVacancy(data.Vacancy);
+            setTotalGeneration(data.totalGeneration);
+            setTotalGainLoss(data.totalGainLoss);
+        },
+    });
+
+    useEffect(() => {
+        getCardMutation.mutate();
+    }, [])
+    //   const data = [
+    //     {
+    //         id: "1",
+    //         title: "Year 2024-25",
+    //         subTitle: "Mahagenco Target",
+    //         value: "200 Unit",
+    //         progress: 0.6,
+    //         current: "150",
+    //         unit: "Unit",
+    //         aboveText: "Current",
+    //         belowText: "Generation",
+    //         meter: "Gain/Loss",
+    //         secondTitle: "",
+    //         innerStroke: colors.red,
+    //     },
+    //     {
+    //         id: "2",
+    //         title: "Year 2024-25",
+    //         subTitle: "Budget Allocate",
+    //         value: "23,43,41,41,140.82 Rs",
+    //         progress: 0.6,
+    //         current: "8,01,51,40,795",
+    //         unit: "Rs",
+    //         aboveText: "Budget",
+    //         belowText: "Consumed",
+    //         meter: "",
+    //         secondTitle: "Budget Allocate",
+    //         innerStroke: colors.red,
+    //     },
+    // ];
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor={colors.lightblue} barStyle="dark-content" />
@@ -108,18 +144,18 @@ const Home = () => {
                         getItemLayout={(data, index) => ({ length: width, offset: width * index, index })}
                         renderItem={({ item }) => <Card {...item} />}
                     /> */}
-<ScrollView 
-                    horizontal 
-                    showsHorizontalScrollIndicator={false} 
-                    style={{ marginTop: 25, }}
+                    <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        style={{ marginTop: 25, }}
                     >
                         {/* Card 1 */}
                         <Card
-                            title="Year 2023"
+                            title="Year 2024-25"
                             subTitle="Mahagenco Target"
-                            value="200 Unit"
+                            value={totalGeneration}
                             progress={0.6}
-                            current="150"
+                            current={totalGainLoss}
                             unit="Unit"
                             aboveText="Current"
                             belowText="Generation"
@@ -128,18 +164,31 @@ const Home = () => {
                             innerStroke={colors.red}
                         />
                         {/* Card 2 */}
-                        <Card
-                            title="Year 2023"
-                            subTitle="Budget Allocate"
-                            value="23,43,41,41,140.82 Rs"
+                        <FinanceCard
+                            title="FY 2024-2025"
+                            subTitle="Budget Available"
+                            value={available}
                             progress={0.6}
-                            current="8,01,51,40,795"
+                            current={budget}
+                            circleValue={consumable}
                             unit="Rs"
-                            aboveText="Budget"
-                            belowText="Consumed"
-                            meter=""
+                            meter="Rs"
                             secondTitle="Budget Allocate"
                             innerStroke={colors.red}
+                            circleHeading="Budget Consumed"
+                        />
+                        {/* Card 3 */}
+                        <ScreenCard
+                            title="Year 2024-2025"
+                            subTitle="Working"
+                            value={working}
+                            progress={0.6}
+                            current={vacancy}
+                            unit=""
+                            meter=""
+                            secondTitle="Total No. of Post"
+                            innerStroke={colors.red}
+                            circleHeading="Total Vaccancies"
                         />
                     </ScrollView>
 

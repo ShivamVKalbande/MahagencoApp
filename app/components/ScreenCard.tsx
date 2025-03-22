@@ -28,7 +28,7 @@ const ScreenCard: React.FC<CardProp> = ({ title, subTitle, value, progress, curr
 
   return (
     <View style={[styles.cardContainer, {width: width * 0.9,}]}>
-      <View>
+      <View style={styles.cardLeft}>
         <View style={styles.textContainer}>
           <Text>{title}</Text>
           <Text style={styles.smallLabel}>{subTitle}</Text>
@@ -45,7 +45,7 @@ const ScreenCard: React.FC<CardProp> = ({ title, subTitle, value, progress, curr
         </View>
       </View>
 
-      <View style={[styles.circleContainer, { justifyContent: 'center', margin:20}]}>
+      <View style={[styles.circleContainer, { justifyContent: 'center'}, styles.cardRight]}>
         <Svg width={size} height={size}>
           {/* Grey Background Circle */}
           <Circle
@@ -72,9 +72,11 @@ const ScreenCard: React.FC<CardProp> = ({ title, subTitle, value, progress, curr
           />
         </Svg>
         <View style={[styles.circleText, { justifyContent:'center' }]}>
-          <Text style={styles.smallLabel}>{circleHeading}</Text>
+          <View style={{width:width*0.2}}>
+            <Text style={[styles.smallLabel, {textAlign:'center'}]}>{circleHeading}</Text>
+          </View>
           {/* <Text style={styles.smallLabel}>{unit}</Text> */}
-          <Text style={[styles.smallLabel, { fontWeight: 'bold' }]}>{value}</Text>
+          <Text style={[styles.smallLabel, { fontWeight: 'bold' }]}>{current}</Text>
           <Text style={styles.smallLabel}>{unit}</Text>
         </View>
       </View>

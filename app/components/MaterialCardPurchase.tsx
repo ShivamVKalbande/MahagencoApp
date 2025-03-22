@@ -43,7 +43,7 @@ const MaterialCardPurchase: React.FC<CardProp> = ({ title, value, circle1, curre
   }
   return (
     <View style={[styles.cardContainer, { height: 200, width: width * 0.9 }]}>
-      <View>
+      <View style={{width: width * 0.54}}>
         <View style={styles.textContainer}>
           <Text>{title}</Text>
           <Text style={styles.purchase}>
@@ -76,7 +76,7 @@ const MaterialCardPurchase: React.FC<CardProp> = ({ title, value, circle1, curre
         </View>
       </View>
 
-      <View style={[styles.circleContainer, { marginHorizontal: 20, justifyContent: 'center' }]}>
+      <View style={[styles.circleContainer, { justifyContent: 'center', width: width * 0.26 }]}>
         <Svg width={size} height={size}>
           {/* Green Progress Circle */}
           <Circle

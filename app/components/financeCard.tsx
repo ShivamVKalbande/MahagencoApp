@@ -29,7 +29,7 @@ const FinanceCard: React.FC<CardProp> = ({ title, subTitle, value, progress, cir
 
   return (
     <View style={[styles.cardContainer, {width: width * 0.9,}]}>
-      <View>
+      <View style={styles.cardLeft}>
         <View style={styles.textContainer}>
           <Text>{title}</Text>
           <Text style={styles.smallLabel}>{subTitle}</Text>
@@ -41,12 +41,12 @@ const FinanceCard: React.FC<CardProp> = ({ title, subTitle, value, progress, cir
           { secondTitle }
           </Text>
         <View style={[styles.textContainer, { borderColor: colors.lightGray, flexDirection: 'row' }]}>
-          <Text style={[styles.mediumLabel, { fontWeight: 'bold' }]}>{current}</Text>
-          <Text style={[styles.mediumLabel, { color: colors.red }]}>{ meter }</Text>
+          <Text style={[styles.mediumLabel, { fontWeight: 'bold' }]}>{current} <Text style={[styles.mediumLabel, { color: colors.red, }]}>{ meter }</Text></Text>
+          
         </View>
       </View>
 
-      <View style={[styles.circleContainer, { justifyContent: 'center', margin:20}]}>
+      <View style={[styles.circleContainer, { justifyContent: 'center',}]}>
         <Svg width={size} height={size}>
           {/* Grey Background Circle */}
           <Circle
@@ -73,7 +73,9 @@ const FinanceCard: React.FC<CardProp> = ({ title, subTitle, value, progress, cir
           />
         </Svg>
         <View style={[styles.circleText, { justifyContent:'center' }]}>
-          <Text style={styles.smallLabel}>{circleHeading}</Text>
+          <View style={{width:width*0.2}}>
+          <Text style={[styles.smallLabel, {textAlign:'center'}]}>{circleHeading}</Text>
+          </View>
           {/* <Text style={styles.smallLabel}>{unit}</Text> */}
           <Text style={[styles.smallLabel, { fontWeight: 'bold' }]}>{circleValue}</Text>
           <Text style={styles.smallLabel}>{unit}</Text>

@@ -80,7 +80,7 @@ const Finance = () => {
         {/* card start */}
         <FinanceCard
           title="FY 2024-2025"
-          subTitle="Budget Allocate"
+          subTitle="Budget Available"
           value={available}
           progress={0.6}
           current={budget}
